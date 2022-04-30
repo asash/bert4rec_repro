@@ -69,7 +69,7 @@ pytest --verbose --forked .
 
 ### 1.  Go to aprec evaluation folder: 
 ```
-cd <yor working directory>
+cd <your working directory>
 cd aprec/evaluation
 ```
 
