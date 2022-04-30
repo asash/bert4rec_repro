@@ -1,0 +1,7 @@
+data/
+data
+.idea/
+evaluation/results/
+evaluation/results
+*__pycache__/
+*.ipynb_checkpoints/
