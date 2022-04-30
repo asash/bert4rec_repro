@@ -5,4 +5,4 @@ DATASET = "BERT4rec.steam"
 N_VAL_USERS=2048
 MAX_TEST_USERS=281428
 SPLIT_STRATEGY = LeaveOneOut(MAX_TEST_USERS)
-RECOMMENDERS = get_recommenders(filter_seen=True)
+RECOMMENDERS = get_recommenders(filter_seen=True, filter_recommenders={"our_bert4rec_longer_seq"})

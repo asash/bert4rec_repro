@@ -21,7 +21,7 @@ cd aprec_repro
 
 ### 3. Create an anaconda environment with necessary package versions:
 ```
-conda create -y --name aprec_repro python=3.9.12 cudnn=8.2.1.32 cudatoolkit=11.6.0  pytorch-gpu=1.10.0 tensorflow-gpu=2.6.2 gh=2.1.0 expect=5.45.4
+conda create -y -c pytorch -c conda-forge --name aprec_repro python=3.9.12 cudnn=8.2.1.32 cudatoolkit=11.6.0  pytorch-gpu=1.10.0 tensorflow-gpu=2.6.2 gh=2.1.0 expect=5.45.4
 ```
 
 ### 4. Add working working directory to the PYTHONPATH of the anaconda environment: 
@@ -36,7 +36,7 @@ conda activate aprec_repro
 
 ### 6. Install python packages in the environment: 
 ```
-pip3  install "jupyter>=1.0.0" "tqdm>=4.62.3" "requests>=2.26.0" "pandas>=1.3.3" "lightfm>=1.16" "scipy>=1.6.0" "tornado>=6.1" "numpy>=1.19.5" "scikit-learn>=1.0" "lightgbm>=3.3.0" "mmh3>=3.0.0" "matplotlib>=3.4.3" "seaborn>=0.11.2" "jupyterlab>=3.2.2" "telegram_send>=0.25" "transformers>=4.16.1" "recbole>=1.0.1" "wget>=3.2" "pytest>=7.1.2" "pytest-forked>=1.4.0"
+pip3  install "jupyter>=1.0.0" "tqdm>=4.62.3" "requests>=2.26.0" "pandas>=1.3.3" "lightfm>=1.16" "scipy>=1.6.0" "tornado>=6.1" "numpy>=1.19.5" "scikit-learn>=1.0" "lightgbm>=3.3.0" "mmh3>=3.0.0" "matplotlib>=3.4.3" "seaborn>=0.11.2" "jupyterlab>=3.2.2" "telegram_send>=0.25" "transformers>=4.16.1" "recbole>=1.0.1" "wget>=3.2" "pytest>=7.1.2" "pytest-forked>=1.4.0" "setuptools==59.5.0"
 ```
 
 ### 7. Clone necessary github repos into workdir: 
@@ -107,6 +107,36 @@ This will give pretty formatted representation of the results:
 
 ![screenshot](images/example_analysis.png)
 
+# Experiment configurations for reproducing the  paper results: 
+
+
+## RQ1. Default BERT4Rec configurations
+
+
+| Experiment                                       | Dataset | Models in the experiment                                                                                                            |
+|--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
+| configs/bert4rec_repro_paper/ml_benchmark1m.py   | ML-1M   | Baselines (MF-BPR, SASRec), 5 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours, Ours-longer-seq) |
+| configs/bert4rec_repro_paper/beauty_benchmark.py | Beauty  | Baselines (MF-BPR, SASRec), 4 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours)                  |
+| configs/bert4rec_repro_paper/steam_benchmark.py  | Steam   | Baselines (MF-BPR, SASRec), 4 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours)                  |
+| configs/bert4rec_repro_paper/ml_20m_benchmark.py | ML-20M  | Baselines (MF-BPR, SASRec), 5 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours, Ours-longer-seq) |
+
+
+## RQ2. Original BERT4Rec training time. 
+
+| Experiment                                       | Dataset | Models in the experiment                                                                                                            |
+|--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
+| ml_1m_original_200000steps.py                    | ML-1M   | Original BERT4Rec (200000 training steps)                                                                                           |
+| ml_1m_original_400000steps.py                    | ML-1M   | Original BERT4Rec (400000 training steps)                                                                                           |
+| ml_1m_original_800000steps.py                    | ML-1M   | Original BERT4Rec (800000 training steps)                                                                                           |
+| ml_1m_original_1600000steps.py                   | ML-1M   | Original BERT4Rec (1600000 training steps)                                                                                          |
+| ml_1m_original_3200000steps.py                   | ML-1M   | Original BERT4Rec (3200000 training steps)                                                                                          |
+| ml_1m_original_6400000steps.py                   | ML-1M   | Original BERT4Rec (6400000 training steps)                                                                                          |
+| ml_1m_original_12800000steps.py                  | ML-1M   | Original BERT4Rec (12800000 training steps)                                                                                         |
 
 
 
+## RQ3. Other Transformers. 
+| Experiment                                       | Dataset | Models in the experiment                                                                                                            |
+|--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
+| configs/bert4rec_repro_paper/ml_1m_deberta.py    | ML-1M   | DeBERTa4Rec                                                                                                                         |
+| configs/bert4rec_repro_paper/ml_1m_albert.py     | ML-1M   | ALBERT4Rec                                                                                                                          |
