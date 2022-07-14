@@ -48,13 +48,13 @@ The patch allows the code to be used as a library: We have to keep this repo sep
 
 
 ```
-git clone <anonymous> b4rvae
+git clone git@github.com:asash/b4rvae.git b4rvae
 ```
 
 #### 7.2 This github repo: 
 
 ```
-git clone <anonymous> aprec
+git clone git@github.com:asash/bert4rec_repro.git aprec
 ```
 
 ### 8. Test the code
