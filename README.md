@@ -55,9 +55,6 @@ pip3  install "jupyter>=1.0.0" "tqdm>=4.62.3" "requests>=2.26.0" "pandas>=1.3.3"
 ```
 
 ### 7. Clone necessary github repos into workdir: 
-**Note: during the paper review stage, please use code in the tar archives linked as addtional materials instead of cloning github repos.**
-
-
 #### 7.1 our patched version of BERT4Rec-VAE-Pytorch version. 
 The patch allows the code to be used as a library: We have to keep this repo separately due to licenses incompatibility
 
