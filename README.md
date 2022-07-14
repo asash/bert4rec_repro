@@ -1,6 +1,18 @@
 # BERT4Rec-Replicability
 
-This repository contains the code and the documentation necessary to replicate our results reported in our paper "A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation". 
+This repository contains the code and the documentation necessary to replicate our results reported in our RecSys 2022 paper "A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation". 
+
+if you use any part of this code, please cite using following BibTex: 
+
+```
+@inproceedings{petrov2022replicability,
+  title={A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation},
+  author={Petrov, Aleksandr and Macdonald, Craig},
+  booktitle={Sixteen ACM Conference on Recommender Systems},
+  year={2022}
+}
+```
+
 
 ## Installation 
 The instruction has been tested on an Ubuntu 22.04 LTS machine with an NVIDIA RTX 3090 GPU. 
