@@ -1,6 +1,6 @@
 # BERT4Rec-Replicability
 
-This repository contains the code and the documentation necessary to replicate our results reported in the BERT4Rec replicability and reproducibility study. 
+This repository contains the code and the documentation necessary to replicate our results reported in our paper "A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation". 
 
 ## Installation 
 The instruction has been tested on an Ubuntu 22.04 LTS machine with an NVIDIA RTX 3090 GPU. 
