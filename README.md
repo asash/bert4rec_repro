@@ -1,6 +1,6 @@
 # BERT4Rec-Replicability
 
-This repository contains the code and the documentation necessary to replicate our results reported in our RecSys 2022 paper "A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation". 
+This repository contains the code and the documentation necessary to replicate our results reported in our RecSys 2022 paper **"A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation"**. 
 
 
 The code includes benchmark of three available BERT4Rec implementations, as well as our own implementation of BERT4Rec based on Hugging Face Transformers library. 
@@ -122,6 +122,31 @@ python3 analyze_experiment_in_progress.py ./results/<experiment_id>/stdout
 This will give pretty formatted representation of the results: 
 
 ![screenshot](images/example_analysis.png)
+
+
+# Hugging Face Transformers based implementation of BERT4Rec. 
+
+Many models in this framework are based on `DNNSequentialRecommender` - basic class for many deep neural networks based models ( [code](https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/dnn_sequential_recommender.py)).
+
+To use this code, you need to configure it with specific model architecture, data splitting strategy, loss function and so on. Here is an example, how to configure it for BERT4Rec with Hugging Face based model:
+
+```python
+         model = BERT4Rec(embedding_size=32) # model architeture
+        recommender = DNNSequentialRecommender(model, train_epochs=10000, early_stop_epochs=50000,
+                                               batch_size=5,
+                                               training_time_limit=10, 
+                                               loss = MeanPredLoss(), # Loss function. Hugging Face model computes loss inside the model, so we just use its output. 
+                                               debug=True, sequence_splitter=lambda: ItemsMasking(), #Items Masking - strategy to separate labels from sequence used by BERT4Rec 
+                                               targets_builder=lambda: ItemsMaskingTargetsBuilder(), #Also items masking - this class is used to convert splitted data to model targets. 
+                                               val_sequence_splitter=lambda: ItemsMasking(force_last=True), #How we split data for validation: only mask element in the sequence. 
+                                               metric=MeanPredLoss(), 
+                                               pred_history_vectorizer=AddMaskHistoryVectorizer(), How we convert sequences for inference. 
+                                               )
+```
+
+More examples how to configure models can be found in [tests](https://github.com/asash/bert4rec_repro/blob/main/tests/test_own_bert.py) and [configuration files](https://github.com/asash/bert4rec_repro/blob/main/evaluation/configs/bert4rec_repro_paper/common_benchmark_config.py). 
+
+The model itself is quite simple and can be found in this [file](https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/models/bert4rec/bert4rec.py). We also provide implementations of ALBERT4Rec ((code)[https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/models/albert4rec/albert4rec.py]) and DeBERTa4Rec ((code)[https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/models/deberta4rec/deberta4rec.py])
 
 # Experiment configurations for reproducing the  paper results: 
 
