@@ -181,3 +181,6 @@ The model itself is quite simple and can be found in this [file](https://github.
 |--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
 | configs/bert4rec_repro_paper/ml_1m_deberta.py    | ML-1M   | DeBERTa4Rec                                                                                                                         |
 | configs/bert4rec_repro_paper/ml_1m_albert.py     | ML-1M   | ALBERT4Rec                                                                                                                          |
+
+# Benchmark results (on MovieLens-1M dataset):
+![Benchmark](images/models_benchmark.svg)
