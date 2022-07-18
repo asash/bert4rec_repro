@@ -1,6 +1,6 @@
 # BERT4Rec-Replicability
 
-This repository contains the code and the documentation necessary to replicate our results reported in our RecSys 2022 paper **"A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation"**. 
+This repository contains the code and the documentation necessary to replicate our results reported in our RecSys 2022 paper **"A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation"** ([paper link](https://arxiv.org/abs/2207.07483)). 
 
 
 The code includes benchmark of three available BERT4Rec implementations, as well as our own implementation of BERT4Rec based on Hugging Face Transformers library. 
