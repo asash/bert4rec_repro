@@ -140,7 +140,7 @@ To use this code, you need to configure it with specific model architecture, dat
                                                targets_builder=lambda: ItemsMaskingTargetsBuilder(), #Also items masking - this class is used to convert splitted data to model targets. 
                                                val_sequence_splitter=lambda: ItemsMasking(force_last=True), #How we split data for validation: only mask element in the sequence. 
                                                metric=MeanPredLoss(), 
-                                               pred_history_vectorizer=AddMaskHistoryVectorizer(), How we convert sequences for inference. 
+                                               pred_history_vectorizer=AddMaskHistoryVectorizer(), #How we convert sequences for inference. 
                                                )
 ```
 
