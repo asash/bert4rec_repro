@@ -1,0 +1,26 @@
+[tool.poetry]
+authors = ["Alexandr Petrov"]
+description = "aprec"
+license = "CONFIDENTIAL"
+name = "aprec"
+version = "1.0.1"
+
+[tool.poetry.dependencies]
+keras = "2.9.0"
+lightfm = "1.16"
+lightgbm = "3.3.2"
+mmh3 = "3.0.0"
+numpy = "1.23.1"
+pandas = "1.4.3"
+python = ">=3.9.0,<3.10.0"
+recbole = "1.0.1"
+scipy = "1.6.0"
+tensorflow = "2.9.1"
+torch = "1.12.0"
+tqdm = "4.64.0"
+transformers = "4.21.1"
+scikit-learn = "1.1.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
