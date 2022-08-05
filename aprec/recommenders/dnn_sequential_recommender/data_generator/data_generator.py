@@ -1,7 +1,7 @@
 import random
 
 import numpy as np
-from tensorflow.python.keras.utils.data_utils import Sequence
+from keras.utils.data_utils import Sequence
 
 from aprec.recommenders.dnn_sequential_recommender \
     .target_builders.full_matrix_targets_builder import FullMatrixTargetsBuilder

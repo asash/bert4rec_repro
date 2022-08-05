@@ -4,13 +4,15 @@ from aprec.losses.loss import Loss
 
 
 class BCELoss(Loss):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__()
         self.__name__ = "BCE"
         self.less_is_better = True
         self.eps = tf.constant(1e-16, "float32")
 
-    def __call__(self, y_true_raw, y_pred):
+    def __call__(self,
+                 y_true_raw: tf.Tensor,
+                 y_pred: tf.Tensor) -> tf.Tensor:
         y_true = tf.cast(y_true_raw, "float32")
         is_target = tf.cast((y_true >= -self.eps), "float32")
         trues = y_true * is_target

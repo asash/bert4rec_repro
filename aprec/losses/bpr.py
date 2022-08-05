@@ -8,12 +8,14 @@ from aprec.losses.loss_utils import (
 )
 
 
-# BPR Loss as  described in orignial paper.
-# https://arxiv.org/abs/1205.2618
-# This loss doesn't include regularization term as in tensorflow it should be done on the model side (e.g. include l2 regularization in embeddings)
-# Setting softmax_weighted into True will turn this loss into BPR-max loss, as described in the GRU4Rec+ paper
-##https://dl.acm.org/doi/abs/10.1145/3269206.3271761
 class BPRLoss(Loss):
+    """BPR Loss as  described in orignial paper.
+    https://arxiv.org/abs/1205.2618
+    This loss doesn't include regularization term as in tensorflow
+    it should be done on the model side (e.g. include l2 regularization in embeddings)
+    Setting softmax_weighted into True will turn this loss into BPR-max loss,
+    as described in the GRU4Rec+ paper
+    https://dl.acm.org/doi/abs/10.1145/3269206.3271761"""
     def __init__(
         self,
         num_items=None,
@@ -27,7 +29,9 @@ class BPRLoss(Loss):
         self.softmax_weighted = softmax_weighted
         self.pred_truncate = pred_truncate
 
-    def __call__(self, y_true, y_pred):
+    def __call__(self,
+                 y_true: tf.Tensor,
+                 y_pred: tf.Tensor) -> tf.Tensor:
         top_true = tf.math.top_k(y_true, self.max_positives)
         pred_ordered_by_true = tf.gather(y_pred, top_true.indices, batch_dims=1)
 

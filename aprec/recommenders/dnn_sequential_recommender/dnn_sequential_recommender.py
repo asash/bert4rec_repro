@@ -10,30 +10,22 @@ from tqdm import tqdm
 
 from aprec.losses.bce import BCELoss
 from aprec.losses.loss import Loss
-from aprec.recommenders.dnn_sequential_recommender.data_generator.data_generator import (
-    DataGenerator,
-)
-from aprec.recommenders.dnn_sequential_recommender.history_vectorizers.default_history_vectorizer import (
-    DefaultHistoryVectrizer,
-)
-from aprec.recommenders.dnn_sequential_recommender.history_vectorizers.history_vectorizer import (
-    HistoryVectorizer,
-)
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
-    SequentialRecsysModel,
-)
-from aprec.recommenders.dnn_sequential_recommender.target_builders.full_matrix_targets_builder import (
-    FullMatrixTargetsBuilder,
-)
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.last_item_splitter import (
-    SequenceContinuation,
-)
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.random_fraction_splitter import (
-    RandomFractionSplitter,
-)
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import (
-    TargetSplitter,
-)
+from aprec.recommenders.dnn_sequential_recommender \
+    .data_generator.data_generator import DataGenerator
+from aprec.recommenders.dnn_sequential_recommender \
+    .history_vectorizers.default_history_vectorizer import DefaultHistoryVectrizer
+from aprec.recommenders.dnn_sequential_recommender \
+    .history_vectorizers.history_vectorizer import HistoryVectorizer
+from aprec.recommenders.dnn_sequential_recommender \
+    .models.sequential_recsys_model import SequentialRecsysModel
+from aprec.recommenders.dnn_sequential_recommender \
+    .target_builders.full_matrix_targets_builder import FullMatrixTargetsBuilder
+from aprec.recommenders.dnn_sequential_recommender \
+    .targetsplitters.last_item_splitter import SequenceContinuation
+from aprec.recommenders.dnn_sequential_recommender \
+    .targetsplitters.random_fraction_splitter import RandomFractionSplitter
+from aprec.recommenders.dnn_sequential_recommender \
+    .targetsplitters.targetsplitter import TargetSplitter
 from aprec.recommenders.metrics.ndcg import KerasNDCG
 from aprec.recommenders.recommender import Recommender
 from aprec.utils.item_id import ItemId

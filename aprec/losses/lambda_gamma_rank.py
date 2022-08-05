@@ -1,23 +1,25 @@
+from typing import Callable, Optional, Tuple
+
 import tensorflow as tf
 
 from aprec.losses.loss import Loss
 
 
 class LambdaGammaRankLoss(Loss):
-    # num items and batch size need to be specified before usage.
-    # some models can do it automatically, therefore they are set to None by default
+    """num items and batch size need to be specified before usage.
+    some models can do it automatically, therefore they are set to None by default"""
     def __init__(
         self,
-        num_items=None,
-        batch_size=None,
-        sigma=1.0,
-        ndcg_at=50,
-        dtype=tf.float32,
-        lambda_normalization=True,
-        pred_truncate_at=None,
-        bce_grad_weight=0.0,
-        remove_batch_dim=False,
-    ):
+        num_items: Optional[int] = None,
+        batch_size: Optional[int] = None,
+        sigma: float = 1.0,
+        ndcg_at: int = 50,
+        dtype: type = tf.float32,
+        lambda_normalization: bool = True,
+        pred_truncate_at: Optional[int] = None,
+        bce_grad_weight: float = 0.0,
+        remove_batch_dim: bool = False,
+    ) -> None:
         super().__init__(num_items, batch_size)
 
         self.__name__ = "lambdarank"
@@ -31,20 +33,20 @@ class LambdaGammaRankLoss(Loss):
         self.lambda_normalization = lambda_normalization
         self.setup()
 
-    def set_num_items(self, num_items):
+    def set_num_items(self, num_items: Optional[int]):
         super().set_num_items(num_items)
         self.setup()
 
-    def set_batch_size(self, batch_size):
+    def set_batch_size(self, batch_size: Optional[int]):
         super().set_batch_size(batch_size)
         self.setup()
 
-    def get_pairwise_diffs_for_vector(self, x):
+    def get_pairwise_diffs_for_vector(self, x: tf.Tensor) -> tf.Tensor:
         a, b = tf.meshgrid(x[: self.ndcg_at], tf.transpose(x))
         result = tf.subtract(b, a)
         return result
 
-    def get_pairwise_diff_batch(self, x):
+    def get_pairwise_diff_batch(self, x: tf.Tensor) -> tf.Tensor:
         x_top_tile = tf.tile(
             tf.expand_dims(x[:, : self.ndcg_at], 1), [1, self.pred_truncate_at, 1]
         )
@@ -52,11 +54,11 @@ class LambdaGammaRankLoss(Loss):
         result = x_tile - x_top_tile
         return result
 
-    def setup(self):
+    def setup(self) -> None:
         if self.batch_size is None or self.num_items is None:
             return
 
-        if self.params_truncate_at == None:
+        if self.params_truncate_at is None:
             self.pred_truncate_at = self.num_items
         else:
             self.pred_truncate_at = self.params_truncate_at
@@ -89,7 +91,11 @@ class LambdaGammaRankLoss(Loss):
         )
 
     @tf.custom_gradient
-    def __call__(self, y_true_raw, y_pred_raw):
+    def __call__(self,
+                 y_true_raw: tf.Tensor,
+                 y_pred_raw: tf.Tensor) -> Tuple[tf.Tensor,
+                                                 Callable[[tf.Tensor],
+                                                          Tuple[tf.Tensor, tf.Tensor]]]:
         if self.remove_batch_dim:
             y_true = tf.reshape(y_true_raw, (self.batch_size, self.num_items))
             y_pred = tf.reshape(y_pred_raw, (self.batch_size, self.num_items))
@@ -98,7 +104,7 @@ class LambdaGammaRankLoss(Loss):
             y_pred = y_pred_raw
         result = tf.reduce_mean(tf.abs(y_pred))
 
-        def grad(dy):
+        def grad(dy: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
             lambdarank_lambdas = self.get_lambdas(y_true, y_pred)
             bce_lambdas = self.get_bce_lambdas(y_true, y_pred)
             return (
@@ -112,20 +118,21 @@ class LambdaGammaRankLoss(Loss):
 
         return result, grad
 
-    def get_bce_lambdas(self, y_true, y_pred):
+    def get_bce_lambdas(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
         with tf.GradientTape() as g:
             g.watch(y_pred)
             bce_loss = tf.nn.sigmoid_cross_entropy_with_logits(y_true, y_pred)
             logits_loss_lambdas = g.gradient(bce_loss, y_pred) / self.num_items
         return logits_loss_lambdas
 
-    def bce_lambdas_len(self, y_true, y_pred):
+    def bce_lambdas_len(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
         bce_lambdas = self.get_bce_lambdas(y_true, y_pred)
         norms = tf.norm(bce_lambdas, axis=1)
         return self.bce_grad_weight * tf.reduce_mean(norms)
 
     @tf.function
-    def get_lambdas(self, y_true, y_pred):
+    def get_lambdas(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
+        assert self.batch_size is not None
         sorted_by_score = tf.nn.top_k(
             tf.cast(y_pred, self.dtype), self.pred_truncate_at
         )
@@ -190,7 +197,7 @@ class LambdaGammaRankLoss(Loss):
         )
         return tf.cast(result_lambdas, tf.float32)
 
-    def get_inverse_idcg(self, true_ordered):
+    def get_inverse_idcg(self, true_ordered: tf.Tensor) -> tf.Tensor:
         top_k_values = tf.nn.top_k(true_ordered, self.ndcg_at).values
         top_k_discounted = tf.linalg.matmul(top_k_values, self.top_position_discounts)
         return tf.reshape(
@@ -200,23 +207,22 @@ class LambdaGammaRankLoss(Loss):
 
 
 class LambdarankLambdasSum(object):
-    def __init__(self, lambdarank_loss):
-        self.lambdarank_loss = lambdarank_loss
+    def __init__(self, lambdarank_loss: LambdaGammaRankLoss) -> None:
+        self.lambdarank_loss: LambdaGammaRankLoss = lambdarank_loss
         self.name = "lambdarank_lambdas_len"
 
-    def __call__(self, y_true, y_pred):
-        lambdas = self.lambdarank_loss.get_lambdas(y_true, y_pred)
+    def __call__(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
+        lambdas: tf.Tensor = self.lambdarank_loss.get_lambdas(y_true, y_pred)
         return (1 - self.lambdarank_loss.bce_grad_weight) * tf.reduce_sum(
             tf.abs(lambdas)
         )
 
 
 class BCELambdasSum(object):
-    def __init__(self, lambdarank_loss):
-        self.lambdarank_loss = lambdarank_loss
+    def __init__(self, lambdarank_loss: LambdaGammaRankLoss) -> None:
+        self.lambdarank_loss: LambdaGammaRankLoss = lambdarank_loss
         self.name = "bce_lambdas_len"
 
-    def __call__(self, y_true, y_pred):
-        lambdas = self.lambdarank_loss.get_bce_lambdas(y_true, y_pred)
-        norms = tf.reduce_sum(lambdas, axis=1)
+    def __call__(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
+        lambdas: tf.Tensor = self.lambdarank_loss.get_bce_lambdas(y_true, y_pred)
         return (self.lambdarank_loss.bce_grad_weight) * tf.reduce_sum(tf.abs(lambdas))

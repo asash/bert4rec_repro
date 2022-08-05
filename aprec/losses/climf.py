@@ -1,7 +1,3 @@
-# CLIMF Loss Implementation
-# See paper:
-# https://dl.acm.org/doi/10.1145/2365952.2365981
-
 import tensorflow as tf
 
 from aprec.losses.loss import Loss
@@ -9,20 +5,25 @@ from aprec.losses.loss_utils import my_map
 
 
 class CLIMFLoss(Loss):
+    """CLIMF Loss Implementation
+    See paper:
+    https://dl.acm.org/doi/10.1145/2365952.2365981"""
     def __init__(self, num_items=None, batch_size=None, max_positives=10):
         super().__init__(num_items, batch_size)
         self.max_positives = max_positives
 
-    def get_pairwise_diffs_matrix(self, x, y):
+    def get_pairwise_diffs_matrix(self, x: tf.Tensor, y: tf.Tensor) -> tf.Tensor:
         a, b = tf.meshgrid(tf.transpose(y), x)
         return tf.subtract(b, a)
 
-    def get_pairwise_diffs_matrices(self, a, b):
+    def get_pairwise_diffs_matrices(self, a: tf.Tensor, b: tf.Tensor) -> tf.Tensor:
         result = my_map(self.get_pairwise_diffs_matrix, (a, b))
         return result
 
     # equation (9) from the paper
-    def __call__(self, y_true, y_pred):
+    def __call__(self,
+                 y_true: tf.Tensor,
+                 y_pred: tf.Tensor) -> tf.Tensor:
         EPS = 1e-6
         top_true = tf.math.top_k(y_true, self.max_positives)
         true_values = top_true.values

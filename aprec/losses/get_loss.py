@@ -17,15 +17,15 @@ losses = {
 
 
 def get_loss(
-    loss_name,
-    items_num,
-    batch_size,
-    max_positives=40,
-    internal_dtype=tf.float32,
-    lambda_normalization=True,
+    loss_name: str,
+    items_num: int,
+    batch_size: int,
+    max_positives: int = 40,
+    internal_dtype: type = tf.float32,
+    lambda_normalization: bool = True,
     lambdarank_pred_truncate=None,
     lambdarank_bce_weight=0.0,
-):
+) -> tf.Tensor:
     if loss_name == "lambdarank":
         return LambdaGammaRankLoss(
             num_items=items_num,
@@ -36,4 +36,5 @@ def get_loss(
             pred_truncate_at=lambdarank_pred_truncate,
             bce_grad_weight=lambdarank_bce_weight,
         )
-    return losses[loss_name](num_items=items_num, batch_size=batch_size)
+    else:
+        return losses[loss_name](num_items=items_num, batch_size=batch_size)
