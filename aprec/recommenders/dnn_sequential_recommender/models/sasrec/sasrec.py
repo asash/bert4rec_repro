@@ -2,8 +2,9 @@ import keras
 import tensorflow as tf
 from keras import activations, layers
 
-from aprec.recommenders.dnn_sequential_recommender.models \
-    .sequential_recsys_model import SequentialRecsysModel
+from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
+    SequentialRecsysModel,
+)
 
 from .sasrec_multihead_attention import multihead_attention
 
@@ -25,7 +26,7 @@ class SASRec(SequentialRecsysModel):
         encode_output_embeddings=False,  # encode item embeddings with a dense layer
         # may be useful if we reuse item embeddings
         vanilla=False,  # vanilla sasrec model uses shifted sequence prediction
-                        # at the training time.
+        # at the training time.
         sampled_targets=None,
     ):
         super().__init__(output_layer_activation, embedding_size, max_history_len)

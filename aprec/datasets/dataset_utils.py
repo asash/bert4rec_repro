@@ -4,12 +4,13 @@ import os
 from collections import Counter
 from typing import Iterator
 
-from aprec.utils.os_utils import get_dir, mkdir_p, shell
 from aprec.api.action import Action
+from aprec.utils.os_utils import get_dir, mkdir_p, shell
 
 
-def filter_popular_items(actions_generator: Iterator[Action],
-                         max_actions: int) -> Iterator[Action]:
+def filter_popular_items(
+    actions_generator: Iterator[Action], max_actions: int
+) -> Iterator[Action]:
     actions = []
     items_counter: Counter = Counter()
     for action in actions_generator:
@@ -21,8 +22,9 @@ def filter_popular_items(actions_generator: Iterator[Action],
     return filter(lambda action: action.item_id in popular_items, actions)
 
 
-def filter_cold_users(actions_generator: Iterator[Action],
-                      min_actions_per_user: int = 0) -> Iterator[Action]:
+def filter_cold_users(
+    actions_generator: Iterator[Action], min_actions_per_user: int = 0
+) -> Iterator[Action]:
     actions = []
     user_counter: Counter = Counter()
     for action in actions_generator:

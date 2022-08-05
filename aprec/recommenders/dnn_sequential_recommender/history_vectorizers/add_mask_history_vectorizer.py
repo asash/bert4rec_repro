@@ -8,7 +8,7 @@ class AddMaskHistoryVectorizer(HistoryVectorizer):
         mask = self.padding_value + 1
         if len(user_actions) >= self.sequence_len - 1:
             return np.array(
-                [action[1] for action in user_actions[-self.sequence_len + 1:]]
+                [action[1] for action in user_actions[-self.sequence_len + 1 :]]
                 + [mask]
             )
         else:

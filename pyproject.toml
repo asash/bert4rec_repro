@@ -33,3 +33,22 @@ types-python-dateutil = "^2.8.19"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+ensure_newline_before_comments = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+use_parentheses = true
+
+[tool.isort]
+ensure_newline_before_comments = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+use_parentheses = true
+
+[tool.pycln]
+all = true

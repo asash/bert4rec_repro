@@ -2,10 +2,12 @@ from typing import List, Optional, Union
 
 
 class User:
-    def __init__(self,
-                 user_id: Union[str, int],
-                 cat_features: Optional[List[str]] = None,
-                 real_features: Optional[List[str]] = None):
+    def __init__(
+        self,
+        user_id: Union[str, int],
+        cat_features: Optional[List[str]] = None,
+        real_features: Optional[List[str]] = None,
+    ):
         if real_features is None:
             self.real_features = []
         else:

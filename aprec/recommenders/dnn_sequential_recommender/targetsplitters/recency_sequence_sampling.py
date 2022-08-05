@@ -9,6 +9,7 @@ def exponential_importance(p: float) -> Callable[[float, float], float]:
     def exponential_importance_func(n: float, k: float) -> float:
         res: float = p ** (n - k)
         return res
+
     return exponential_importance_func
 
 
@@ -38,8 +39,7 @@ class RecencySequenceSampling(TargetSplitter):
             res: float = self.recency_iportnace(len(sequence), j)
             return res
 
-        f_vals = np.array([recency_importance_func(i)
-                           for i in range(len(sequence))])
+        f_vals = np.array([recency_importance_func(i) for i in range(len(sequence))])
         f_sum = sum(f_vals)
         sampled_idx = set(
             self.random.choice(

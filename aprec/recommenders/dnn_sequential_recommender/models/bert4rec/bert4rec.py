@@ -3,8 +3,9 @@ import tensorflow as tf
 from keras import Model
 from transformers import BertConfig, TFBertForMaskedLM
 
-from aprec.recommenders.dnn_sequential_recommender.models \
-    .sequential_recsys_model import SequentialRecsysModel
+from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
+    SequentialRecsysModel,
+)
 
 
 class BERT4Rec(SequentialRecsysModel):

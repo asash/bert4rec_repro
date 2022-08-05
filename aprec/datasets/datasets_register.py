@@ -1,6 +1,6 @@
 """This file contains register of all available datasets in our system.
 Unless necessary only use datasets from this file."""
-from typing import Callable, Dict, List, Iterable
+from typing import Callable, Dict, Iterable, List
 
 from aprec.api.action import Action
 from aprec.datasets.bert4rec_datasets import get_bert4rec_dataset

@@ -1,5 +1,5 @@
-import tensorflow as tf
 import keras.backend as K
+import tensorflow as tf
 
 
 class KerasSuccess(object):

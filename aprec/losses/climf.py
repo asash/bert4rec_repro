@@ -8,6 +8,7 @@ class CLIMFLoss(Loss):
     """CLIMF Loss Implementation
     See paper:
     https://dl.acm.org/doi/10.1145/2365952.2365981"""
+
     def __init__(self, num_items=None, batch_size=None, max_positives=10):
         super().__init__(num_items, batch_size)
         self.max_positives = max_positives
@@ -21,9 +22,7 @@ class CLIMFLoss(Loss):
         return result
 
     # equation (9) from the paper
-    def __call__(self,
-                 y_true: tf.Tensor,
-                 y_pred: tf.Tensor) -> tf.Tensor:
+    def __call__(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
         EPS = 1e-6
         top_true = tf.math.top_k(y_true, self.max_positives)
         true_values = top_true.values

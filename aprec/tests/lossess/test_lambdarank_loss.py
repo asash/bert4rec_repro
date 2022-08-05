@@ -5,8 +5,8 @@ class TestLambdarankLoss(unittest.TestCase):
     def lambdas_sample_test(
         self, y, s, lambdas, ndcg_at=30, bce_weight=0.0, remove_batch_dim=False
     ):
-        import tensorflow as tf
         import keras.backend as K
+        import tensorflow as tf
 
         from aprec.losses.lambda_gamma_rank import LambdaGammaRankLoss
 

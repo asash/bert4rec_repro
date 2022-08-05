@@ -3,10 +3,12 @@ import random
 import numpy as np
 from keras.utils.data_utils import Sequence
 
-from aprec.recommenders.dnn_sequential_recommender \
-    .target_builders.full_matrix_targets_builder import FullMatrixTargetsBuilder
-from aprec.recommenders.dnn_sequential_recommender \
-    .targetsplitters.random_fraction_splitter import RandomFractionSplitter
+from aprec.recommenders.dnn_sequential_recommender.target_builders.full_matrix_targets_builder import (
+    FullMatrixTargetsBuilder,
+)
+from aprec.recommenders.dnn_sequential_recommender.targetsplitters.random_fraction_splitter import (
+    RandomFractionSplitter,
+)
 
 
 class DataGenerator(Sequence):

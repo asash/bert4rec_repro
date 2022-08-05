@@ -2,9 +2,9 @@ from typing import List, Union
 
 
 class ItemsRankingRequest:
-    def __init__(self,
-                 user_id: Union[str, int],
-                 item_ids: List[Union[str, int]]) -> None:
+    def __init__(
+        self, user_id: Union[str, int], item_ids: List[Union[str, int]]
+    ) -> None:
         self.user_id = user_id
         self.item_ids = item_ids
 

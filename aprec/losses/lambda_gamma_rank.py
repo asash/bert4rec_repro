@@ -8,6 +8,7 @@ from aprec.losses.loss import Loss
 class LambdaGammaRankLoss(Loss):
     """num items and batch size need to be specified before usage.
     some models can do it automatically, therefore they are set to None by default"""
+
     def __init__(
         self,
         num_items: Optional[int] = None,
@@ -91,11 +92,9 @@ class LambdaGammaRankLoss(Loss):
         )
 
     @tf.custom_gradient
-    def __call__(self,
-                 y_true_raw: tf.Tensor,
-                 y_pred_raw: tf.Tensor) -> Tuple[tf.Tensor,
-                                                 Callable[[tf.Tensor],
-                                                          Tuple[tf.Tensor, tf.Tensor]]]:
+    def __call__(
+        self, y_true_raw: tf.Tensor, y_pred_raw: tf.Tensor
+    ) -> Tuple[tf.Tensor, Callable[[tf.Tensor], Tuple[tf.Tensor, tf.Tensor]]]:
         if self.remove_batch_dim:
             y_true = tf.reshape(y_true_raw, (self.batch_size, self.num_items))
             y_pred = tf.reshape(y_pred_raw, (self.batch_size, self.num_items))

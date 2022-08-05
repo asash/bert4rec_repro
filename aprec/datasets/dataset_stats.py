@@ -7,6 +7,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from aprec.api.action import Action
+
 from .datasets_register import DatasetsRegister
 
 pd.set_option("display.max_rows", None, "display.max_columns", None)
@@ -67,9 +68,9 @@ all_metrics = {
 }
 
 
-def dataset_stats(dataset: Iterable[Action],
-                  metrics: List[str],
-                  dataset_name: Optional[str] = None) -> Dict[str, Any]:
+def dataset_stats(
+    dataset: Iterable[Action], metrics: List[str], dataset_name: Optional[str] = None
+) -> Dict[str, Any]:
     users = defaultdict(list)
     item_ids = set()
     for action in dataset:

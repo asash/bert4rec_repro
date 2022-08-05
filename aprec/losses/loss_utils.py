@@ -14,19 +14,18 @@ def my_map(fn, arrays: tf.Tensor, dtype=tf.float32) -> tf.Tensor:
     return out
 
 
-def get_pairwise_diff_batch(a: tf.Tensor,
-                            b: tf.Tensor,
-                            a_size: int,
-                            b_size: int) -> tf.Tensor:
+def get_pairwise_diff_batch(
+    a: tf.Tensor, b: tf.Tensor, a_size: int, b_size: int
+) -> tf.Tensor:
     a_tile = tf.tile(tf.expand_dims(a, 1), [1, b_size, 1])
     b_tile = tf.tile(tf.expand_dims(b, 2), [1, 1, a_size])
     result = a_tile - b_tile
     return result
 
 
-def get_truncated(y_true: tf.Tensor,
-                  y_pred: tf.Tensor,
-                  truncate_at: Optional[int]) -> Tuple[tf.Tensor, tf.Tensor]:
+def get_truncated(
+    y_true: tf.Tensor, y_pred: tf.Tensor, truncate_at: Optional[int]
+) -> Tuple[tf.Tensor, tf.Tensor]:
     if truncate_at is not None:
         top_pred = tf.math.top_k(y_pred, truncate_at)
         pred = top_pred.values

@@ -1,14 +1,15 @@
-from typing import Dict, Optional, Union
-
 import json
+from typing import Dict, Optional, Union
 
 
 class Action:
-    def __init__(self,
-                 user_id: Union[str, int],
-                 item_id: Union[str, int],
-                 timestamp: int,
-                 data: Optional[Dict[str, Union[float, int]]] = None):
+    def __init__(
+        self,
+        user_id: Union[str, int],
+        item_id: Union[str, int],
+        timestamp: int,
+        data: Optional[Dict[str, Union[float, int]]] = None,
+    ):
         self.data: Dict[str, Union[float, int]] = data if data is not None else {}
         self.user_id = user_id
         self.item_id = item_id

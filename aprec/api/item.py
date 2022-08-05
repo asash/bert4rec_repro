@@ -8,10 +8,12 @@ class Item(object):
     tags: Optional[List[str]] = None
     title: Optional[str] = None
 
-    def __init__(self,
-                 item_id: Union[str, int],
-                 cat_features: Optional[List[str]] = None,
-                 real_features: Optional[List[str]] = None) -> None:
+    def __init__(
+        self,
+        item_id: Union[str, int],
+        cat_features: Optional[List[str]] = None,
+        real_features: Optional[List[str]] = None,
+    ) -> None:
         if real_features is None:
             self.real_features = []
         else:

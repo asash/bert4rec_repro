@@ -1,20 +1,18 @@
 import tensorflow as tf
 
 from aprec.losses.loss import Loss
-from aprec.losses.loss_utils import (
-    get_truncated,
-    masked_softmax,
-)
+from aprec.losses.loss_utils import get_truncated, masked_softmax
 
 
 class TOP1Loss(Loss):
     """TOP1 loss as defined in GRU4rec Papper https://arxiv.org/pdf/1511.06939
     We assume that there is only one positive sample.
     If there are more then one posive, the one will be sampled randomly.
-    
+
     setting softmax_weighting to True turns this loss into TOP1-Max loss,
     described in the GRU4Rrec+ Paper
     https://dl.acm.org/doi/abs/10.1145/3269206.3271761"""
+
     def __init__(
         self,
         num_items=None,
@@ -26,9 +24,7 @@ class TOP1Loss(Loss):
         self.pred_truncate = pred_truncate
         self.softmax_weighted = softmax_weighted
 
-    def __call__(self,
-                 y_true: tf.Tensor,
-                 y_pred: tf.Tensor) -> tf.Tensor:
+    def __call__(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
         top_true = tf.math.top_k(y_true)
         positive_true = top_true.values
         positive_pred = tf.gather(y_pred, top_true.indices, batch_dims=1)
