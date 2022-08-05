@@ -2,7 +2,7 @@ import gc
 import random
 import time
 
-import tensorflow.keras.backend as K
+import keras.backend as K
 from collections import defaultdict
 import tensorflow as tf
 
@@ -22,7 +22,7 @@ from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_mode
 from aprec.losses.loss import Loss
 from aprec.losses.bce import BCELoss
 
-from tensorflow.keras.optimizers import Adam
+from keras.optimizers import Adam
 
 import numpy as np
 

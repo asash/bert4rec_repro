@@ -1,13 +1,12 @@
-import keras
 import numpy as np
 from scipy.sparse import csr_matrix
-from tensorflow.keras.optimizers import Adam
+from keras.optimizers import Adam
 from tqdm import trange
 
 from aprec.recommenders.recommender import Recommender
-from tensorflow.keras import Model
-from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.losses import BinaryCrossentropy
+from keras import Model
+from keras.layers import Input, Dense
+from keras.losses import BinaryCrossentropy
 import tensorflow as tf
 from aprec.utils.item_id import ItemId
 

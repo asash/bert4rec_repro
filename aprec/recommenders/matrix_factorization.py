@@ -8,9 +8,9 @@ from scipy.sparse import csr_matrix
 
 from aprec.recommenders.recommender import Recommender
 from aprec.utils.item_id import ItemId
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Embedding
-from tensorflow.keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Dense, Embedding
+from keras.optimizers import Adam
 from keras.regularizers import l2
 import tensorflow as tf
 from aprec.losses.get_loss import get_loss

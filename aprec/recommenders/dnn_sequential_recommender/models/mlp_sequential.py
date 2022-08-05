@@ -1,5 +1,5 @@
-from tensorflow.keras.models import Sequential
-import tensorflow.keras.layers as layers
+from keras.models import Sequential
+import keras.layers as layers
 
 from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import SequentialRecsysModel
 

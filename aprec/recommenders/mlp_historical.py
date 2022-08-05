@@ -5,9 +5,9 @@ from aprec.utils.item_id import ItemId
 from aprec.recommenders.recommender import Recommender
 from scipy.sparse import csr_matrix
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import Sequential
-import tensorflow.keras.layers as layers
-from tensorflow.keras.utils import Sequence
+from keras.models import Sequential
+import keras.layers as layers
+from keras.utils import Sequence
 import numpy as np
 import math
 

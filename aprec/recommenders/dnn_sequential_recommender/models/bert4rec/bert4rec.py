@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras import Model
+from keras import Model
 import tensorflow as tf
 
 from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import SequentialRecsysModel

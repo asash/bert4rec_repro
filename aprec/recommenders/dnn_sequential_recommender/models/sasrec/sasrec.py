@@ -1,7 +1,5 @@
-import tensorflow.keras
-from tensorflow.keras.regularizers import l2
-from tensorflow.keras import layers
-from tensorflow.keras import activations
+from keras import layers
+from keras import activations
 
 from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import SequentialRecsysModel
 from .sasrec_multihead_attention import multihead_attention
