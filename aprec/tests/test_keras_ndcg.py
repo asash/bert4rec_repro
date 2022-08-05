@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras.backend as K
+import keras.backend as K
 
 from aprec.recommenders.metrics.ndcg import KerasNDCG
 

@@ -1,9 +1,9 @@
+import keras
 import tensorflow as tf
 from keras import activations, layers
 
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
-    SequentialRecsysModel,
-)
+from aprec.recommenders.dnn_sequential_recommender.models \
+    .sequential_recsys_model import SequentialRecsysModel
 
 from .sasrec_multihead_attention import multihead_attention
 
@@ -56,7 +56,7 @@ class SASRec(SequentialRecsysModel):
         return model
 
 
-class OwnSasrecModel(tensorflow.keras.Model):
+class OwnSasrecModel(keras.Model):
     def __init__(
         self,
         num_items,

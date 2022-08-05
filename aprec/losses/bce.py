@@ -1,6 +1,4 @@
 import tensorflow as tf
-import tensorflow.keras.backend as K
-from tensorflow.keras.losses import BinaryCrossentropy
 
 from aprec.losses.loss import Loss
 

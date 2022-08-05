@@ -65,7 +65,7 @@ class TestTOP1Loss(unittest.TestCase):
             self.compare_with_naive(y_true, y_pred, ordered, weighted)
 
     def test_top1_loss(self):
-        import tensorflow.keras.backend as K
+        import keras.backend as K
 
         from aprec.losses.top1 import TOP1Loss
 

@@ -16,8 +16,8 @@ class TestXENDCGLoss(unittest.TestCase):
     @unittest.skip  # TODO - this test sometimes fails, as model training is stochastic.
     def test_model_xendcg(self):
         import tensorflow as tf
-        from tensorflow.keras.layers import Dense
-        from tensorflow.keras.models import Sequential
+        from keras.layers import Dense
+        from keras.models import Sequential
 
         X = tf.constant([[0.0, 0], [1, 0]])
         Y = tf.constant([[1.0, 0], [0, 1]])

@@ -61,7 +61,7 @@ class TestBPRLoss(unittest.TestCase):
     def test_compare_with_naive(self):
         import random
 
-        import tensorflow.keras.backend as K
+        import keras.backend as K
 
         self.compare_with_naive([0.0, 1.0], [0.1, 0])
         random.seed(6)
@@ -77,7 +77,7 @@ class TestBPRLoss(unittest.TestCase):
             self.compare_with_naive(y_true, y_pred, ordered, weighted)
 
     def test_bpr_loss(self):
-        import tensorflow.keras.backend as K
+        import keras.backend as K
 
         from aprec.losses.bpr import BPRLoss
 
@@ -101,7 +101,7 @@ class TestBPRLoss(unittest.TestCase):
         self.assertLess(good_pred_loss, avg_pred_loss)
 
     def test_bpr_loss_with_softmax(self):
-        import tensorflow.keras.backend as K
+        import keras.backend as K
 
         from aprec.losses.bpr import BPRLoss
 

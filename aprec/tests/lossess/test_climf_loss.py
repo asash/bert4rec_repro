@@ -3,7 +3,7 @@ import unittest
 
 class TestCLIMFLoss(unittest.TestCase):
     def test_climf_loss(self):
-        import tensorflow.keras.backend as K
+        import keras.backend as K
 
         from aprec.losses.climf import CLIMFLoss
 

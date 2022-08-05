@@ -1,4 +1,4 @@
-from tensorflow.keras.optimizers import Adam
+from keras.optimizers import Adam
 
 from aprec.evaluation.metrics.hit import HIT
 from aprec.evaluation.metrics.map import MAP
