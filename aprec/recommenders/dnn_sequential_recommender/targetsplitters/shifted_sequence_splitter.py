@@ -1,4 +1,3 @@
-from random import Random
 
 from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import (
     TargetSplitter,

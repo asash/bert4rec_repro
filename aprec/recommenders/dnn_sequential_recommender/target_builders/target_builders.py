@@ -1,4 +1,3 @@
-import random
 
 import numpy as np
 from scipy.sparse.csr import csr_matrix

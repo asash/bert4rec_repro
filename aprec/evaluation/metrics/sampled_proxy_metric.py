@@ -1,5 +1,5 @@
 import random
-from collections import Counter, defaultdict
+from collections import Counter
 
 import numpy as np
 

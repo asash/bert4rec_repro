@@ -1,4 +1,3 @@
-import math
 
 from .metric import Metric
 

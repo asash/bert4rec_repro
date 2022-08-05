@@ -1,7 +1,5 @@
 import gzip
 import os
-import sys
-from re import I
 from typing import List
 
 import lightgbm

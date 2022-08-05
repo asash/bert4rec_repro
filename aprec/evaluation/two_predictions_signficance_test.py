@@ -1,7 +1,6 @@
 import gzip
 import json
 import os
-import sys
 from argparse import ArgumentParser
 
 import pandas as pd

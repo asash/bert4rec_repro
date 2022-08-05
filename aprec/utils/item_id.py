@@ -1,4 +1,4 @@
-from collections import Counter, defaultdict
+from collections import Counter
 
 
 class ItemId(object):

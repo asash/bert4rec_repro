@@ -1,4 +1,3 @@
-import math
 
 from .metric import Metric
 
@@ -20,5 +19,4 @@ class MAP(Metric):
             if predicted in actual_set:
                 correct_predictions += 1
                 running_sum += correct_predictions / pos
-                pass
         return running_sum / len(actual_actions)
