@@ -24,6 +24,4 @@ class ItemId(object):
         return item_id in self.straight
 
     def reverse_id(self, id):
-        return self.reverse[id] 
-
-
+        return self.reverse[id]

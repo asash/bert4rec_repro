@@ -6,8 +6,11 @@ import tensorflow as tf
 def my_map(fn, arrays, dtype=tf.float32):
     # assumes all arrays have same leading dim
     indices = tf.range(tf.shape(arrays[0])[0])
-    out = tf.map_fn(lambda ii: fn(*[array[ii] for array in arrays]), indices, dtype=dtype)
+    out = tf.map_fn(
+        lambda ii: fn(*[array[ii] for array in arrays]), indices, dtype=dtype
+    )
     return out
+
 
 def get_pairwise_diff_batch(a, b, a_size, b_size):
     a_tile = tf.tile(tf.expand_dims(a, 1), [1, b_size, 1])
@@ -20,11 +23,12 @@ def get_truncated(y_true, y_pred, truncate_at):
     if truncate_at is not None:
         top_pred = tf.math.top_k(y_pred, truncate_at)
         pred = top_pred.values
-        true_ordered_by_pred = tf.gather(y_true, top_pred.indices, batch_dims=1) 
+        true_ordered_by_pred = tf.gather(y_true, top_pred.indices, batch_dims=1)
     else:
         pred = y_pred
         true_ordered_by_pred = y_true
-    return pred,true_ordered_by_pred
+    return pred, true_ordered_by_pred
+
 
 def masked_softmax(x, mask):
     exp = tf.math.exp(x) * mask

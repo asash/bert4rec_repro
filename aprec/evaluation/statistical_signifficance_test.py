@@ -3,7 +3,9 @@ import json
 import os
 from argparse import ArgumentParser
 from collections import defaultdict
+
 from scipy.stats import ttest_ind
+
 
 def get_arguments():
     parser = ArgumentParser()
@@ -29,19 +31,14 @@ def process(arguments):
                 metrics[metric][recommender_name].append(user_doc["metrics"][metric])
     result = defaultdict(lambda: defaultdict(dict))
     for metric in metrics:
-       for recommender_name_1 in metrics[metric]:
-           rec_1_sample = metrics[metric][recommender_name_1]
-           for recommender_name_2 in metrics[metric]:
+        for recommender_name_1 in metrics[metric]:
+            rec_1_sample = metrics[metric][recommender_name_1]
+            for recommender_name_2 in metrics[metric]:
                 rec_2_sample = metrics[metric][recommender_name_2]
                 t, p_value = ttest_ind(rec_1_sample, rec_2_sample)
                 result[recommender_name_1][metric][recommender_name_2] = p_value
-    with open(arguments.output_file, 'w') as output:
+    with open(arguments.output_file, "w") as output:
         output.write(json.dumps(result, indent=4))
-
-
-
-
-
 
 
 def main():

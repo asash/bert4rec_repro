@@ -1,5 +1,6 @@
 import mmh3
 
+
 class HashingFeaturizer(object):
     def __init__(self, num_cat_hashes=3, cat_hashes_space=1000):
         self.num_cat_hashes = num_cat_hashes

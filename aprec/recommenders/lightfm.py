@@ -1,12 +1,20 @@
-from aprec.utils.item_id import ItemId
-from aprec.recommenders.recommender import Recommender
-from scipy.sparse import csr_matrix
-from lightfm import LightFM
 import numpy as np
+from lightfm import LightFM
+from scipy.sparse import csr_matrix
+
+from aprec.recommenders.recommender import Recommender
+from aprec.utils.item_id import ItemId
 
 
 class LightFMRecommender(Recommender):
-    def __init__(self, num_latent_components, random_seed=None, loss='bpr', n_epochs=20, num_threads=4):
+    def __init__(
+        self,
+        num_latent_components,
+        random_seed=None,
+        loss="bpr",
+        n_epochs=20,
+        num_threads=4,
+    ):
         super().__init__()
         self.latent_components = num_latent_components
         self.users = ItemId()
@@ -16,7 +24,7 @@ class LightFMRecommender(Recommender):
         self.vals = []
         self.model = None
         self.num_threads = num_threads
-        self.loss=loss
+        self.loss = loss
         self.n_epochs = n_epochs
 
     def name(self):
@@ -32,11 +40,16 @@ class LightFMRecommender(Recommender):
     def rebuild_model(self):
         matrix_original = csr_matrix((self.vals, (self.rows, self.cols)))
         self.model = LightFM(no_components=self.latent_components, loss=self.loss)
-        self.model.fit(matrix_original, epochs=self.n_epochs, verbose=True, num_threads=self.num_threads)
+        self.model.fit(
+            matrix_original,
+            epochs=self.n_epochs,
+            verbose=True,
+            num_threads=self.num_threads,
+        )
 
     def recommend(self, user_id_external, limit, features=None):
-        if not(self.users.has_item(user_id_external)):
-            return [] #can't process unknown users
+        if not (self.users.has_item(user_id_external)):
+            return []  # can't process unknown users
         user_id = self.users.get_id(user_id_external)
         items_ids = [i for i in range(self.items.size())]
         scores = self.model.predict(user_id, items_ids)
@@ -44,7 +57,6 @@ class LightFMRecommender(Recommender):
         result = [(self.items.reverse_id(id), scores[id]) for id in best_ids]
         result.sort(key=lambda x: -x[1])
         return result
-
 
     def get_item_rankings(self):
         result = {}

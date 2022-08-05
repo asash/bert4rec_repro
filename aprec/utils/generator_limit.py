@@ -5,4 +5,3 @@ def generator_limit(generator, n):
             break
         yield item
         limit += 1
- 

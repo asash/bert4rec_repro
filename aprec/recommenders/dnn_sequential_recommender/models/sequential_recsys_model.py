@@ -1,4 +1,5 @@
-#base class for many sequential recsys models
+# base class for many sequential recsys models
+
 
 class SequentialRecsysModel(object):
     def __init__(self, output_layer_activation, embedding_size, max_history_len):
@@ -12,10 +13,15 @@ class SequentialRecsysModel(object):
         self.user_feature_max_val = None
         self.batch_size = None
 
-    def set_common_params(self, num_items, num_users,
-             max_user_features, user_feature_max_val, 
-             batch_size, item_features=None, 
-             ):
+    def set_common_params(
+        self,
+        num_items,
+        num_users,
+        max_user_features,
+        user_feature_max_val,
+        batch_size,
+        item_features=None,
+    ):
         self.num_items = num_items
         self.num_users = num_users
         self.max_user_features = max_user_features

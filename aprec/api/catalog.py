@@ -1,7 +1,8 @@
-def relevancy (keyword, string):
+def relevancy(keyword, string):
     if keyword.lower() == string.lower():
         return -1
     return keyword.lower().find(string.lower())
+
 
 class Catalog(object):
     def __init__(self):
@@ -20,4 +21,3 @@ class Catalog(object):
                 result.append(item)
         result.sort(key=lambda value: relevancy(keyword, value.title))
         return result
-

@@ -1,5 +1,7 @@
-from .metric import Metric
 from collections import Counter
+
+from .metric import Metric
+
 
 class AveragePopularityRank(Metric):
     def __init__(self, k, actions):
@@ -15,15 +17,14 @@ class AveragePopularityRank(Metric):
             rank += 1
             self.pop_rank[item] = rank
 
-        
     def __call__(self, recommendations, actual_actions):
         cnt = 0
-        s =  0
-        for recommendation in recommendations[:self.k]:
+        s = 0
+        for recommendation in recommendations[: self.k]:
             item_id = recommendation[0]
             if item_id in self.pop_rank:
                 s += self.pop_rank[item_id]
                 cnt += 1
         if cnt == 0:
             return 0
-        return s/cnt
+        return s / cnt

@@ -1,4 +1,4 @@
-class Loss():
+class Loss:
     def __init__(self, num_items=None, batch_size=None):
         self.num_items = num_items
         self.batch_size = batch_size

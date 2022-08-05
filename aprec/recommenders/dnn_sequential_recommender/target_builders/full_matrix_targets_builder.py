@@ -1,6 +1,9 @@
 import numpy as np
 from scipy.sparse.csr import csr_matrix
-from aprec.recommenders.dnn_sequential_recommender.target_builders.target_builders import TargetBuilder
+
+from aprec.recommenders.dnn_sequential_recommender.target_builders.target_builders import (
+    TargetBuilder,
+)
 
 
 class FullMatrixTargetsBuilder(TargetBuilder):
@@ -14,7 +17,7 @@ class FullMatrixTargetsBuilder(TargetBuilder):
         cols = []
         vals = []
         for i in range(len(user_targets)):
-            cur_val = self.max_target_label 
+            cur_val = self.max_target_label
             for action_num in range(len(user_targets[i])):
                 action = user_targets[i][action_num]
                 rows.append(i)
@@ -23,9 +26,13 @@ class FullMatrixTargetsBuilder(TargetBuilder):
                 cur_val *= self.target_decay
                 if cur_val < self.min_target_val:
                     cur_val = self.min_target_val
-        self.target_matrix = csr_matrix((vals, (rows, cols)), shape=(len(user_targets), self.n_items),
-                                                                                        dtype='float32')
+        self.target_matrix = csr_matrix(
+            (vals, (rows, cols)),
+            shape=(len(user_targets), self.n_items),
+            dtype="float32",
+        )
+
     def get_targets(self, start, end):
-        target_inputs = [] 
+        target_inputs = []
         target_outputs = np.array(self.target_matrix[start:end].todense())
         return target_inputs, target_outputs

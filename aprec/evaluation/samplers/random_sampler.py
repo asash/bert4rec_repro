@@ -15,11 +15,14 @@ class RandomTargetItemSampler(TargetItemSampler):
         result = []
         for user_id in by_user_test:
             target_items = set(action.item_id for action in by_user_test[user_id])
-            while(len(target_items) < self.target_size):
-                item_ids = np.random.choice(items,
-                  self.target_size - len(target_items),replace=False)
+            while len(target_items) < self.target_size:
+                item_ids = np.random.choice(
+                    items, self.target_size - len(target_items), replace=False
+                )
                 for item_id in item_ids:
                     if item_id not in target_items:
                         target_items.add(item_id)
-            result.append(ItemsRankingRequest(user_id=user_id, item_ids=list(target_items)))
+            result.append(
+                ItemsRankingRequest(user_id=user_id, item_ids=list(target_items))
+            )
         return result

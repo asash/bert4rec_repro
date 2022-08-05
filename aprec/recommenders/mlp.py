@@ -1,16 +1,18 @@
-from aprec.utils.item_id import ItemId
-from aprec.recommenders.recommender import Recommender
+import math
+
+import keras.layers as layers
+import numpy as np
+from keras.models import Sequential
+from keras.utils import Sequence
 from scipy.sparse import csr_matrix
 from sklearn.model_selection import train_test_split
-from keras.models import Sequential
-import keras.layers as layers
-from keras.utils import Sequence
-import numpy as np
-import math
+
+from aprec.recommenders.recommender import Recommender
+from aprec.utils.item_id import ItemId
 
 
 class GreedyMLP(Recommender):
-    def __init__(self,  bottleneck_size=32, train_epochs=300):
+    def __init__(self, bottleneck_size=32, train_epochs=300):
         self.users = ItemId()
         self.items = ItemId()
         self.rows = []
@@ -39,22 +41,24 @@ class GreedyMLP(Recommender):
         train_data, val_data = train_test_split(self.matrix)
         generator = BatchGenerator(train_data)
         val_generator = BatchGenerator(val_data)
-        self.model.fit(generator, epochs=self.train_epochs, 
-                            validation_data=val_generator)
+        self.model.fit(
+            generator, epochs=self.train_epochs, validation_data=val_generator
+        )
 
     def get_model(self, n_movies):
-        model = Sequential(name='MLP')
+        model = Sequential(name="MLP")
         model.add(layers.Input(shape=(n_movies), name="input"))
         model.add(layers.Dropout(0.5, name="input_drouput"))
         model.add(layers.Dense(256, name="dense1", activation="relu"))
         model.add(layers.Dense(128, name="dense2", activation="relu"))
-        model.add(layers.Dense(self.bottleneck_size,
-                name="bottleneck", activation="relu"))
+        model.add(
+            layers.Dense(self.bottleneck_size, name="bottleneck", activation="relu")
+        )
         model.add(layers.Dense(128, name="dense3", activation="relu"))
         model.add(layers.Dense(256, name="dense4", activation="relu"))
         model.add(layers.Dropout(0.5, name="dropout"))
         model.add(layers.Dense(n_movies, name="output", activation="sigmoid"))
-        model.compile(optimizer='adam', loss='binary_crossentropy')
+        model.compile(optimizer="adam", loss="binary_crossentropy")
         return model
 
     def recommend(self, user_id, limit, features=None):
@@ -76,7 +80,7 @@ class GreedyMLP(Recommender):
 
 
 class BatchGenerator(Sequence):
-    def __init__(self, matrix, batch_size = 1000):
+    def __init__(self, matrix, batch_size=1000):
         self.matrix = matrix
         self.batch_size = batch_size
         self.current_position = 0
@@ -86,7 +90,9 @@ class BatchGenerator(Sequence):
         return math.ceil(self.matrix.shape[0] / self.batch_size)
 
     def __getitem__(self, idx):
-        batch = self.matrix[idx * self.batch_size:(idx + 1) * self.batch_size].todense()
+        batch = self.matrix[
+            idx * self.batch_size : (idx + 1) * self.batch_size
+        ].todense()
         return batch, batch
 
     def __next__(self):

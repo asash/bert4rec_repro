@@ -1,10 +1,14 @@
-from aprec.recommenders.recommender import Recommender
 from collections import Counter
 
+from aprec.recommenders.recommender import Recommender
+
+
 class TopRecommender(Recommender):
-    def __init__(self, recency=1.0): #recency parameter controls how many actions are considered out of all actions
+    def __init__(
+        self, recency=1.0
+    ):  # recency parameter controls how many actions are considered out of all actions
         super().__init__()
-        self.items_counter=Counter()
+        self.items_counter = Counter()
         self.item_scores = {}
         self.actions = []
         self.recency = recency
@@ -26,8 +30,7 @@ class TopRecommender(Recommender):
         return self.most_common[:limit]
 
     def get_metadata(self):
-        return {"top 20 items":  self.most_common[:20]}
-
+        return {"top 20 items": self.most_common[:20]}
 
     def get_similar_items(self, item_id, limit):
         return self.most_common[:limit]
@@ -45,6 +48,3 @@ class TopRecommender(Recommender):
             request_result.sort(key=lambda x: -x[1])
             result[request.user_id] = request_result
         return result
-
-
-

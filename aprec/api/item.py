@@ -13,7 +13,6 @@ class Item(object):
         self.cat_features = cat_features
         self.real_features = real_features
 
-
     def with_tags(self, tags):
         self.tags = tags
         return self

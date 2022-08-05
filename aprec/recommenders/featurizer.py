@@ -1,6 +1,7 @@
 from aprec.api.action import Action
-from aprec.api.user import User
 from aprec.api.item import Item
+from aprec.api.user import User
+
 
 class Featurizer(object):
     def __init__(self):

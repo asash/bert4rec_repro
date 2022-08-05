@@ -1,4 +1,5 @@
 from collections import Counter
+
 from aprec.api.user import User
 from aprec.recommenders.recommender import Recommender
 
@@ -8,16 +9,18 @@ class ConditionalTopRecommender(Recommender):
     This recommender calculates top items based on some condition. For example, we want to recommend
     the most popular hotel in the city, not globally (for global top we can use @TopRecommender).
     """
+
     def __init__(self, conditional_field: str):
         self.conditional_field: str = conditional_field
         self.items_counts: dict = dict()
         self.precalculated_top_items: dict = dict()
         self.user_field_values: dict = dict()
-    
+
     def add_user(self, user: User):
         if self.conditional_field in user.cat_features:
-            self.user_field_values[user.user_id] = user.cat_features[self.conditional_field]
-        
+            self.user_field_values[user.user_id] = user.cat_features[
+                self.conditional_field
+            ]
 
     def add_action(self, action):
 
@@ -36,7 +39,8 @@ class ConditionalTopRecommender(Recommender):
 
     def rebuild_model(self):
         self.precalculated_top_items = {
-            field_value: counter.most_common() for field_value, counter in self.items_counts.items()
+            field_value: counter.most_common()
+            for field_value, counter in self.items_counts.items()
         }
 
     def recommend(self, user_id, limit, features=None):

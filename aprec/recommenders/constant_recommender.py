@@ -1,5 +1,6 @@
 from .recommender import Recommender
 
+
 class ConstantRecommender(Recommender):
     def __init__(self, recommendations):
         self.recommendations = recommendations
@@ -20,7 +21,7 @@ class ConstantRecommender(Recommender):
         return self.recommendations[:limit]
 
     def to_str(self):
-        raise(NotImplementedError)
+        raise (NotImplementedError)
 
     def from_str(self):
-        raise(NotImplementedError)
+        raise (NotImplementedError)

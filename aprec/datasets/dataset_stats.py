@@ -1,16 +1,15 @@
-from collections import defaultdict
 from argparse import ArgumentParser
-
-import pandas as pd
-from tqdm import tqdm
+from collections import defaultdict
 
 import numpy as np
+import pandas as pd
+from tqdm import tqdm
 
 from aprec.datasets.datasets_register import DatasetsRegister
 
 pd.set_option("display.max_rows", None, "display.max_columns", None)
-pd.set_option('display.expand_frame_repr', False)
-pd.set_option('display.max_colwidth', 256)
+pd.set_option("display.expand_frame_repr", False)
+pd.set_option("display.max_colwidth", 256)
 
 
 def num_users(users, items, session_lens):
@@ -20,17 +19,22 @@ def num_users(users, items, session_lens):
 def num_items(users, items, session_lens):
     return len(items)
 
+
 def num_interactions(users, items, session_lens):
     return sum(session_lens)
+
 
 def average_session_len(users, items, session_lens):
     return float(np.mean(session_lens))
 
+
 def median_session_len(users, items, session_lens):
     return int(np.median(session_lens))
 
+
 def min_session_len(users, items, session_lens):
     return int(np.min(session_lens))
+
 
 def max_session_len(users, items, session_lens):
     return int(np.max(session_lens))
@@ -39,23 +43,25 @@ def max_session_len(users, items, session_lens):
 def p80_session_len(user, items, session_lens):
     return float(np.percentile(session_lens, 80))
 
+
 def sparsity(users, items, session_lens):
     sum_interacted = 0
     for user in users:
         interacted_items = len(set(users[user]))
         sum_interacted += interacted_items
-    return 1 - sum_interacted/(len(users)*len(items))
+    return 1 - sum_interacted / (len(users) * len(items))
+
 
 all_metrics = {
-    "num_users": num_users, 
-    "num_items": num_items, 
-    "num_interactions": num_interactions, 
-    "average_session_len": average_session_len, 
-    "median_session_len": median_session_len, 
-    "min_session_len": min_session_len, 
-    "max_session_len": max_session_len, 
+    "num_users": num_users,
+    "num_items": num_items,
+    "num_interactions": num_interactions,
+    "average_session_len": average_session_len,
+    "median_session_len": median_session_len,
+    "min_session_len": min_session_len,
+    "max_session_len": max_session_len,
     "p80_session_len": p80_session_len,
-    "sparsity": sparsity 
+    "sparsity": sparsity,
 }
 
 
@@ -74,14 +80,24 @@ def dataset_stats(dataset, metrics, dataset_name=None):
             result[metric] = all_metrics[metric](users, item_ids, session_lens)
 
     if dataset_name is not None:
-        result['name'] = dataset_name
+        result["name"] = dataset_name
     return result
+
 
 if __name__ == "__main__":
 
     parser = ArgumentParser()
-    parser.add_argument("--datasets", required=True, help=f"Available Datasets: {','.join(DatasetsRegister().all_datasets())}")
-    parser.add_argument("--metrics", required=False, help=f"Available Columns: {','.join(all_metrics.keys())}", default=','.join(all_metrics.keys()))
+    parser.add_argument(
+        "--datasets",
+        required=True,
+        help=f"Available Datasets: {','.join(DatasetsRegister().all_datasets())}",
+    )
+    parser.add_argument(
+        "--metrics",
+        required=False,
+        help=f"Available Columns: {','.join(all_metrics.keys())}",
+        default=",".join(all_metrics.keys()),
+    )
     parser.add_argument("--latex_table", required=False, default=False)
     args = parser.parse_args()
 
@@ -96,7 +112,7 @@ if __name__ == "__main__":
         dataset = DatasetsRegister()[dataset_name]()
         stats = dataset_stats(dataset, metrics, dataset_name=dataset_name)
         docs.append(stats)
-        del(dataset)
+        del dataset
     df = pd.DataFrame(docs).set_index("name")
     if not args.latex_table:
         print(df)

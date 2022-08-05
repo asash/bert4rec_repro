@@ -1,43 +1,60 @@
 from xmlrpc.client import Boolean
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import SequentialRecsysModel
+
+import numpy as np
+import tensorflow as tf
+from keras import Model, activations
+from keras.layers import (
+    Activation,
+    Add,
+    Dense,
+    Dropout,
+    Embedding,
+    Layer,
+    LayerNormalization,
+    Permute,
+)
 from transformers.models.bert.modeling_tf_bert import BertConfig, TFBertMLMHead
 
-from keras import Model
-from keras import activations
-from keras.layers import Embedding, Dense, Permute, Add, LayerNormalization, Activation, Layer, Dropout
-import tensorflow as tf
-import numpy as np
+from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
+    SequentialRecsysModel,
+)
 
 
 class RecsysMixer(SequentialRecsysModel):
-    def __init__(self, output_layer_activation = 'linear',
-                 embedding_size = 64, max_history_len = 100, token_mixer_hidden_dim = 64, channel_mixer_hidden_dim=64, num_blocks=2, l2_emb=0.1):
+    def __init__(
+        self,
+        output_layer_activation="linear",
+        embedding_size=64,
+        max_history_len=100,
+        token_mixer_hidden_dim=64,
+        channel_mixer_hidden_dim=64,
+        num_blocks=2,
+        l2_emb=0.1,
+    ):
         super().__init__(output_layer_activation, embedding_size, max_history_len)
         self.embedding_size = embedding_size
         self.max_history_length = max_history_len
-        self.output_layer_activation = output_layer_activation 
-        self.token_mixer_hidden_dim = token_mixer_hidden_dim 
+        self.output_layer_activation = output_layer_activation
+        self.token_mixer_hidden_dim = token_mixer_hidden_dim
         self.channel_mixer_hidden_dim = channel_mixer_hidden_dim
         self.num_blocks = num_blocks
         self.l2_emb = l2_emb
 
     def get_model(self):
-        return MixerModel(self.embedding_size,
-                          self.max_history_length, 
-                          self.output_layer_activation, 
-                          self.num_items, 
-                          self.num_blocks, 
-                          self.token_mixer_hidden_dim, 
-                          self.channel_mixer_hidden_dim)
+        return MixerModel(
+            self.embedding_size,
+            self.max_history_length,
+            self.output_layer_activation,
+            self.num_items,
+            self.num_blocks,
+            self.token_mixer_hidden_dim,
+            self.channel_mixer_hidden_dim,
+        )
+
 
 class MlpBlock(Layer):
     def __init__(
-        self,
-        dim: int,
-        hidden_dim: int,
-        dropout_prob: float,
-        activation=None,
-        **kwargs
+        self, dim: int, hidden_dim: int, dropout_prob: float, activation=None, **kwargs
     ):
         super(MlpBlock, self).__init__(**kwargs)
 
@@ -65,10 +82,7 @@ class MlpBlock(Layer):
 
     def get_config(self):
         config = super(MlpBlock, self).get_config()
-        config.update({
-            'dim': self.dim,
-            'hidden_dim': self.hidden_dim
-        })
+        config.update({"dim": self.dim, "hidden_dim": self.hidden_dim})
         return config
 
 
@@ -100,11 +114,18 @@ class MixerBlock(Layer):
 
         self.norm1 = LayerNormalization(axis=1)
         self.permute1 = Permute((2, 1))
-        self.token_mixer = MlpBlock(num_patches, token_mixer_hidden_dim, token_dropout_prob, name='token_mixer')
+        self.token_mixer = MlpBlock(
+            num_patches, token_mixer_hidden_dim, token_dropout_prob, name="token_mixer"
+        )
 
         self.permute2 = Permute((2, 1))
         self.norm2 = LayerNormalization(axis=1)
-        self.channel_mixer = MlpBlock(channel_dim, channel_mixer_hidden_dim, channel_dropout_prob, name='channel_mixer')
+        self.channel_mixer = MlpBlock(
+            channel_dim,
+            channel_mixer_hidden_dim,
+            channel_dropout_prob,
+            name="channel_mixer",
+        )
 
         self.skip_connection1 = Add()
         self.skip_connection2 = Add()
@@ -133,68 +154,89 @@ class MixerBlock(Layer):
 
     def get_config(self):
         config = super(MixerBlock, self).get_config()
-        config.update({
-            'num_patches': self.num_patches,
-            'channel_dim': self.channel_dim,
-            'token_mixer_hidden_dim': self.token_mixer_hidden_dim,
-            'channel_mixer_hidden_dim': self.channel_mixer_hidden_dim,
-            'activation': self.activation,
-        })
+        config.update(
+            {
+                "num_patches": self.num_patches,
+                "channel_dim": self.channel_dim,
+                "token_mixer_hidden_dim": self.token_mixer_hidden_dim,
+                "channel_mixer_hidden_dim": self.channel_mixer_hidden_dim,
+                "activation": self.activation,
+            }
+        )
         return config
 
 
-
 class MixerModel(Model):
-    def __init__(self, embedding_size, max_history_length, output_layer_activation, num_items, num_blocks,
-                        token_mixer_hidden_dim, 
-                        channel_mixer_hidden_dim, 
-                        token_dropout_prob = 0.2, 
-                        channel_dropout_prob = 0.2,
-                        emb_l2_weight = 0.1,
-                        *args, **kwargs):
+    def __init__(
+        self,
+        embedding_size,
+        max_history_length,
+        output_layer_activation,
+        num_items,
+        num_blocks,
+        token_mixer_hidden_dim,
+        channel_mixer_hidden_dim,
+        token_dropout_prob=0.2,
+        channel_dropout_prob=0.2,
+        emb_l2_weight=0.1,
+        *args,
+        **kwargs
+    ):
         super().__init__(*args, **kwargs)
-        self.positions_embedding = Embedding(2 * max_history_length, embedding_size) 
-        self.item_embeddings = Embedding(num_items + 2, embedding_size) 
+        self.positions_embedding = Embedding(2 * max_history_length, embedding_size)
+        self.item_embeddings = Embedding(num_items + 2, embedding_size)
         self.mixer_blocks = []
         for _ in range(num_blocks):
-            self.mixer_blocks.append(MixerBlock(max_history_length, embedding_size, token_mixer_hidden_dim, channel_mixer_hidden_dim, 
-                token_dropout_prob=token_dropout_prob, channel_dropout_prob=channel_dropout_prob))
+            self.mixer_blocks.append(
+                MixerBlock(
+                    max_history_length,
+                    embedding_size,
+                    token_mixer_hidden_dim,
+                    channel_mixer_hidden_dim,
+                    token_dropout_prob=token_dropout_prob,
+                    channel_dropout_prob=channel_dropout_prob,
+                )
+            )
         self.num_blocks = num_blocks
-        self.position_ids_for_pred = tf.constant(np.array(list(range(1, max_history_length +1))).reshape(1, max_history_length))
+        self.position_ids_for_pred = tf.constant(
+            np.array(list(range(1, max_history_length + 1))).reshape(
+                1, max_history_length
+            )
+        )
         self.all_items = tf.range(0, num_items)
-        self.emb_l2_weight = emb_l2_weight 
-
-        
+        self.emb_l2_weight = emb_l2_weight
 
     def call(self, inputs, **kwargs):
         sequences = inputs[0]
-        labels = inputs[1]        
+        labels = inputs[1]
         positions = inputs[2]
-        train = kwargs['training']
+        train = kwargs["training"]
         scores, embeddings = self.get_scores(sequences, positions, train, True)
-        
+
         l2 = tf.reduce_sum(embeddings * embeddings) * self.emb_l2_weight
 
         loss = hf_compute_loss(labels, scores) + l2
         return loss
 
     def get_scores(self, sequences, positions, train, return_emb=False):
-        x = self.positions_embedding(positions) +  self.item_embeddings(sequences)
+        x = self.positions_embedding(positions) + self.item_embeddings(sequences)
         for mixer_block in self.mixer_blocks:
-            x = mixer_block(x, train) 
+            x = mixer_block(x, train)
 
-        all_item_embeddings = self.item_embeddings(self.all_items) 
+        all_item_embeddings = self.item_embeddings(self.all_items)
         result = x @ tf.transpose(all_item_embeddings)
         if not return_emb:
             return result
         else:
             return result, all_item_embeddings
 
-
     def score_all_items(self, inputs):
-        sequence = inputs[0] 
-        result = self.get_scores(sequence, self.position_ids_for_pred, False)[:,-1,:-2]
+        sequence = inputs[0]
+        result = self.get_scores(sequence, self.position_ids_for_pred, False)[
+            :, -1, :-2
+        ]
         return result
+
 
 def hf_compute_loss(labels, logits):
     loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(
@@ -202,10 +244,11 @@ def hf_compute_loss(labels, logits):
     )
     # make sure only labels that are not equal to -100 affect the loss
     active_loss = tf.not_equal(tf.reshape(labels, (-1,)), -100)
-    reduced_logits = tf.boolean_mask(tf.reshape(logits, (-1, shape_list(logits)[2])), active_loss)
+    reduced_logits = tf.boolean_mask(
+        tf.reshape(logits, (-1, shape_list(logits)[2])), active_loss
+    )
     labels = tf.boolean_mask(tf.reshape(labels, (-1,)), active_loss)
     return loss_fn(labels, reduced_logits)
-
 
 
 def shape_list(tensor):

@@ -14,16 +14,14 @@
 # limitations under the License.
 """Functions and classes related to optimization (weight updates)."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import re
+
 import tensorflow as tf
 
 
-def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps,
-                     use_tpu):
+def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps, use_tpu):
     """Creates an optimizer training op."""
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
@@ -36,7 +34,8 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps,
         num_train_steps,
         end_learning_rate=0.0,
         power=1.0,
-        cycle=False)
+        cycle=False,
+    )
 
     # Implements linear warmup. I.e., if global_step < num_warmup_steps, the
     # learning rate will be `global_step/num_warmup_steps * init_lr`.
@@ -51,8 +50,9 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps,
         warmup_learning_rate = init_lr * warmup_percent_done
 
         is_warmup = tf.cast(global_steps_int < warmup_steps_int, tf.float32)
-        learning_rate = ((1.0 - is_warmup) * learning_rate +
-                         is_warmup * warmup_learning_rate)
+        learning_rate = (
+            1.0 - is_warmup
+        ) * learning_rate + is_warmup * warmup_learning_rate
 
     # It is recommended that you use this optimizer for fine tuning, since this
     # is how the model was trained (note that the Adam m/v variables are NOT
@@ -63,7 +63,8 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps,
         beta_1=0.9,
         beta_2=0.999,
         epsilon=1e-6,
-        exclude_from_weight_decay=["LayerNorm", "layer_norm", "bias"])
+        exclude_from_weight_decay=["LayerNorm", "layer_norm", "bias"],
+    )
 
     if use_tpu:
         optimizer = tf.compat.v1.tpu.CrossShardOptimizer(optimizer)
@@ -74,8 +75,7 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps,
     # This is how the model was pre-trained.
     (grads, _) = tf.clip_by_global_norm(grads, clip_norm=5.0)
 
-    train_op = optimizer.apply_gradients(
-        zip(grads, tvars), global_step=global_step)
+    train_op = optimizer.apply_gradients(zip(grads, tvars), global_step=global_step)
 
     new_global_step = global_step + 1
     train_op = tf.group(train_op, [global_step.assign(new_global_step)])
@@ -85,14 +85,16 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps,
 class AdamWeightDecayOptimizer(tf.compat.v1.train.Optimizer):
     """A basic Adam optimizer that includes "correct" L2 weight decay."""
 
-    def __init__(self,
-                 learning_rate,
-                 weight_decay_rate=0.0,
-                 beta_1=0.9,
-                 beta_2=0.999,
-                 epsilon=1e-6,
-                 exclude_from_weight_decay=None,
-                 name="AdamWeightDecayOptimizer"):
+    def __init__(
+        self,
+        learning_rate,
+        weight_decay_rate=0.0,
+        beta_1=0.9,
+        beta_2=0.999,
+        epsilon=1e-6,
+        exclude_from_weight_decay=None,
+        name="AdamWeightDecayOptimizer",
+    ):
         """Constructs a AdamWeightDecayOptimizer."""
         super(AdamWeightDecayOptimizer, self).__init__(False, name)
 
@@ -117,19 +119,21 @@ class AdamWeightDecayOptimizer(tf.compat.v1.train.Optimizer):
                 shape=param.shape.as_list(),
                 dtype=tf.float32,
                 trainable=False,
-                initializer=tf.compat.v1.zeros_initializer())
+                initializer=tf.compat.v1.zeros_initializer(),
+            )
             v = tf.compat.v1.get_variable(
                 name=param_name + "/adam_v",
                 shape=param.shape.as_list(),
                 dtype=tf.float32,
                 trainable=False,
-                initializer=tf.compat.v1.zeros_initializer())
+                initializer=tf.compat.v1.zeros_initializer(),
+            )
 
             # Standard Adam update.
-            next_m = (tf.multiply(self.beta_1, m) +
-                      tf.multiply(1.0 - self.beta_1, grad))
-            next_v = (tf.multiply(self.beta_2, v) +
-                      tf.multiply(1.0 - self.beta_2, tf.square(grad)))
+            next_m = tf.multiply(self.beta_1, m) + tf.multiply(1.0 - self.beta_1, grad)
+            next_v = tf.multiply(self.beta_2, v) + tf.multiply(
+                1.0 - self.beta_2, tf.square(grad)
+            )
 
             update = next_m / (tf.sqrt(next_v) + self.epsilon)
 
@@ -148,9 +152,8 @@ class AdamWeightDecayOptimizer(tf.compat.v1.train.Optimizer):
             next_param = param - update_with_lr
 
             assignments.extend(
-                [param.assign(next_param),
-                 m.assign(next_m),
-                 v.assign(next_v)])
+                [param.assign(next_param), m.assign(next_m), v.assign(next_v)]
+            )
         return tf.group(*assignments, name=name)
 
     def _do_use_weight_decay(self, param_name):

@@ -1,15 +1,15 @@
 from tqdm import tqdm
-from aprec.api.item import Item
 
+from aprec.api.action import Action
+from aprec.api.item import Item
 from aprec.api.items_ranking_request import ItemsRankingRequest
 from aprec.api.user import User
-from aprec.api.action import Action
 
 
-class Recommender():
+class Recommender:
     def __init__(self):
         self.items_ranking_requests = []
-        self.val_users = set() 
+        self.val_users = set()
 
     def name(self):
         raise NotImplementedError
@@ -38,8 +38,6 @@ class Recommender():
     def add_item(self, item: Item):
         pass
 
-
-
     def recommend_by_items(self, items_list, limit: int):
         raise (NotImplementedError)
 
@@ -52,8 +50,7 @@ class Recommender():
     def from_str(self):
         raise (NotImplementedError)
 
-
-    #the directory where the recommender can save stuff, like logs
+    # the directory where the recommender can save stuff, like logs
     def set_out_dir(self, out_dir):
         self.out_dir = out_dir
 

@@ -9,30 +9,37 @@ from aprec.recommenders.filter_seen_recommender import FilterSeenRecommender
 
 USERS_FRACTIONS = [1.0]
 
+
 def b4rvae_bert4rec(epochs=None):
     return B4rVaeBert4Rec(epochs=epochs)
 
 
 recommenders = {
-      "b4vae_bert4rec": lambda: b4rvae_bert4rec(epochs=1000),
+    "b4vae_bert4rec": lambda: b4rvae_bert4rec(epochs=1000),
 }
 
 TARGET_ITEMS_SAMPLER = PopTargetItemsSampler(101)
 METRICS = [HIT(1), HIT(5), HIT(10), NDCG(5), NDCG(10), MRR(), HIT(4), NDCG(40), MAP(10)]
 
-def get_recommenders(filter_seen: bool, filter_recommenders = set()):
+
+def get_recommenders(filter_seen: bool, filter_recommenders=set()):
     result = {}
     for recommender_name in recommenders:
         if recommender_name in filter_recommenders:
-                continue
+            continue
         if filter_seen:
-            result[recommender_name] =\
-                lambda recommender_name=recommender_name: FilterSeenRecommender(recommenders[recommender_name]())
+            result[
+                recommender_name
+            ] = lambda recommender_name=recommender_name: FilterSeenRecommender(
+                recommenders[recommender_name]()
+            )
         else:
             result[recommender_name] = recommenders[recommender_name]
     return result
+
+
 DATASET = "BERT4rec.beauty"
-N_VAL_USERS=2048
-MAX_TEST_USERS=40226
+N_VAL_USERS = 2048
+MAX_TEST_USERS = 40226
 SPLIT_STRATEGY = LeaveOneOut(MAX_TEST_USERS)
 RECOMMENDERS = get_recommenders(filter_seen=True)

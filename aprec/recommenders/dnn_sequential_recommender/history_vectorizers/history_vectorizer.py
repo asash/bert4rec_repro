@@ -4,7 +4,7 @@ class HistoryVectorizer(object):
         self.padding_value = None
 
     def set_sequence_len(self, sequence_len):
-        self.sequence_len =  sequence_len
+        self.sequence_len = sequence_len
 
     def set_padding_value(self, padding_value):
         self.padding_value = padding_value

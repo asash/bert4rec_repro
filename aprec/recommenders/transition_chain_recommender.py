@@ -1,5 +1,5 @@
 import math
-from collections import defaultdict, Counter
+from collections import Counter, defaultdict
 
 import numpy as np
 from tqdm import tqdm
@@ -15,6 +15,7 @@ class TransitionsChainRecommender(Recommender):
     During the training phase we calculate counts between events in a sequence and last event (target).
     During the inference phase we take all events of user and sum up all counts to predict next event.
     """
+
     def __init__(self):
         self.top_recommender = TopRecommender()
         self.item_id_to_index: dict = dict()
@@ -49,13 +50,14 @@ class TransitionsChainRecommender(Recommender):
         for item in df:
             idf[item] = len(self.user_to_items) / math.log(df[item] + 1)
 
-
         print("building transitions matrix...")
         for _, items in tqdm(self.user_to_items.items()):
             for t in range(1, len(items)):
                 target_item = items[t]
                 for item_id in items[:t]:
-                    self.transition_matrix[self.item_id_to_index[item_id]][self.item_id_to_index[target_item]] += 1
+                    self.transition_matrix[self.item_id_to_index[item_id]][
+                        self.item_id_to_index[target_item]
+                    ] += 1
         self.graph = defaultdict(list)
 
         print("caching predictions...")
@@ -66,7 +68,7 @@ class TransitionsChainRecommender(Recommender):
 
     def recommend(self, user_id, limit, features=None):
         if user_id not in self.user_to_items:
-            return [] #"New user without history"
+            return []  # "New user without history"
         return self.recommend_by_items(self.user_to_items[user_id], limit)
 
     def recommend_by_items(self, items_list, limit):
@@ -92,7 +94,6 @@ class TransitionsChainRecommender(Recommender):
                 if len(result) >= limit:
                     break
         return result[:limit]
-
 
     def get_similar_items(self, item_id, limit):
         raise NotImplementedError

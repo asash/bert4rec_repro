@@ -1,46 +1,66 @@
 import gc
 import random
 import time
+from collections import defaultdict
 
 import keras.backend as K
-from collections import defaultdict
+import numpy as np
 import tensorflow as tf
-
+from keras.optimizers import Adam
 from tqdm import tqdm
-from aprec.recommenders.dnn_sequential_recommender.history_vectorizers.default_history_vectorizer import DefaultHistoryVectrizer
-from aprec.recommenders.dnn_sequential_recommender.history_vectorizers.history_vectorizer import HistoryVectorizer
-from aprec.recommenders.dnn_sequential_recommender.target_builders.full_matrix_targets_builder import FullMatrixTargetsBuilder
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.last_item_splitter import SequenceContinuation
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.random_fraction_splitter import RandomFractionSplitter
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import TargetSplitter
 
-from aprec.utils.item_id import ItemId
+from aprec.losses.bce import BCELoss
+from aprec.losses.loss import Loss
+from aprec.recommenders.dnn_sequential_recommender.data_generator.data_generator import (
+    DataGenerator,
+)
+from aprec.recommenders.dnn_sequential_recommender.history_vectorizers.default_history_vectorizer import (
+    DefaultHistoryVectrizer,
+)
+from aprec.recommenders.dnn_sequential_recommender.history_vectorizers.history_vectorizer import (
+    HistoryVectorizer,
+)
+from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
+    SequentialRecsysModel,
+)
+from aprec.recommenders.dnn_sequential_recommender.target_builders.full_matrix_targets_builder import (
+    FullMatrixTargetsBuilder,
+)
+from aprec.recommenders.dnn_sequential_recommender.targetsplitters.last_item_splitter import (
+    SequenceContinuation,
+)
+from aprec.recommenders.dnn_sequential_recommender.targetsplitters.random_fraction_splitter import (
+    RandomFractionSplitter,
+)
+from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import (
+    TargetSplitter,
+)
 from aprec.recommenders.metrics.ndcg import KerasNDCG
 from aprec.recommenders.recommender import Recommender
-from aprec.recommenders.dnn_sequential_recommender.data_generator.data_generator import DataGenerator
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import SequentialRecsysModel
-from aprec.losses.loss import Loss
-from aprec.losses.bce import BCELoss
-
-from keras.optimizers import Adam
-
-import numpy as np
+from aprec.utils.item_id import ItemId
 
 
 class DNNSequentialRecommender(Recommender):
-    def __init__(self, model_arch: SequentialRecsysModel, loss: Loss = BCELoss(),
-                 users_featurizer=None,
-                 items_featurizer=None,
-                 train_epochs=300, optimizer=Adam(),
-                 sequence_splitter:TargetSplitter = RandomFractionSplitter, 
-                 val_sequence_splitter:TargetSplitter = SequenceContinuation,
-                 targets_builder = FullMatrixTargetsBuilder,
-                 batch_size=1000, early_stop_epochs=100, target_decay=1.0,
-                 training_time_limit=None, debug=False,
-                 metric = KerasNDCG(40), 
-                 train_history_vectorizer:HistoryVectorizer = DefaultHistoryVectrizer(), 
-                 pred_history_vectorizer:HistoryVectorizer = DefaultHistoryVectrizer(),
-                 ):
+    def __init__(
+        self,
+        model_arch: SequentialRecsysModel,
+        loss: Loss = BCELoss(),
+        users_featurizer=None,
+        items_featurizer=None,
+        train_epochs=300,
+        optimizer=Adam(),
+        sequence_splitter: TargetSplitter = RandomFractionSplitter,
+        val_sequence_splitter: TargetSplitter = SequenceContinuation,
+        targets_builder=FullMatrixTargetsBuilder,
+        batch_size=1000,
+        early_stop_epochs=100,
+        target_decay=1.0,
+        training_time_limit=None,
+        debug=False,
+        metric=KerasNDCG(40),
+        train_history_vectorizer: HistoryVectorizer = DefaultHistoryVectrizer(),
+        pred_history_vectorizer: HistoryVectorizer = DefaultHistoryVectrizer(),
+    ):
         super().__init__()
         self.model_arch = model_arch
         self.users = ItemId()
@@ -69,7 +89,7 @@ class DNNSequentialRecommender(Recommender):
         self.max_user_feature_val = 0
         self.targets_builder = targets_builder
         self.debug = debug
-        self.metric = metric 
+        self.metric = metric
         self.val_sequence_splitter = val_sequence_splitter
         self.train_history_vectorizer = train_history_vectorizer
         self.pred_history_vectorizer = pred_history_vectorizer
@@ -78,14 +98,17 @@ class DNNSequentialRecommender(Recommender):
         if self.users_featurizer is None:
             pass
         else:
-            self.user_features[self.users.get_id(user.user_id)] = self.users_featurizer(user)
+            self.user_features[self.users.get_id(user.user_id)] = self.users_featurizer(
+                user
+            )
 
     def add_item(self, item):
         if self.items_featurizer is None:
             pass
         else:
-            self.item_features[self.items.get_id(item.item_id)] = self.items_featurizer(item)
-
+            self.item_features[self.items.get_id(item.item_id)] = self.items_featurizer(
+                item
+            )
 
     def get_metadata(self):
         return self.metadata
@@ -100,7 +123,9 @@ class DNNSequentialRecommender(Recommender):
         user_id_internal = self.users.get_id(action.user_id)
         action_id_internal = self.items.get_id(action.item_id)
         self.users_with_actions.add(user_id_internal)
-        self.user_actions[user_id_internal].append((action.timestamp, action_id_internal))
+        self.user_actions[user_id_internal].append(
+            (action.timestamp, action_id_internal)
+        )
 
     # exclude last action for val_users
     def user_actions_by_id_list(self, id_list, val_user_ids=None):
@@ -123,26 +148,41 @@ class DNNSequentialRecommender(Recommender):
         self.sort_actions()
         self.pass_parameters()
         self.max_user_features, self.max_user_feature_val = self.get_max_user_features()
-        train_users, train_user_ids, train_features, val_users, val_user_ids, val_features = self.train_val_split()
+        (
+            train_users,
+            train_user_ids,
+            train_features,
+            val_users,
+            val_user_ids,
+            val_features,
+        ) = self.train_val_split()
 
-        print("train_users: {}, val_users:{}, items:{}".format(len(train_users), len(val_users), self.items.size()))
-        val_generator = DataGenerator(val_users, val_user_ids, val_features, self.model_arch.max_history_length,
-                                      self.items.size(),
-                                      self.train_history_vectorizer,
-                                      batch_size=self.batch_size,
-                                      sequence_splitter=self.val_sequence_splitter, 
-                                      user_id_required=self.model_arch.requires_user_id,
-                                      max_user_features=self.max_user_features,
-                                      user_features_required=not (self.users_featurizer is None), 
-                                      targets_builder=self.targets_builder,
-                                      shuffle_data=False
-                                      )
+        print(
+            "train_users: {}, val_users:{}, items:{}".format(
+                len(train_users), len(val_users), self.items.size()
+            )
+        )
+        val_generator = DataGenerator(
+            val_users,
+            val_user_ids,
+            val_features,
+            self.model_arch.max_history_length,
+            self.items.size(),
+            self.train_history_vectorizer,
+            batch_size=self.batch_size,
+            sequence_splitter=self.val_sequence_splitter,
+            user_id_required=self.model_arch.requires_user_id,
+            max_user_features=self.max_user_features,
+            user_features_required=not (self.users_featurizer is None),
+            targets_builder=self.targets_builder,
+            shuffle_data=False,
+        )
 
         self.model = self.get_model(val_generator)
         if self.metric.less_is_better:
-            best_metric_val = float('inf')
+            best_metric_val = float("inf")
         else:
-            best_metric_val = float('-inf')
+            best_metric_val = float("-inf")
 
         steps_since_improved = 0
         best_epoch = -1
@@ -151,21 +191,27 @@ class DNNSequentialRecommender(Recommender):
         start_time = time.time()
 
         if not self.debug:
-            self.model.compile(optimizer=self.optimizer, loss=self.loss, metrics=[self.metric])
+            self.model.compile(
+                optimizer=self.optimizer, loss=self.loss, metrics=[self.metric]
+            )
 
         for epoch in range(self.train_epochs):
             val_generator.reset()
-            generator = DataGenerator(train_users, train_user_ids, train_features, self.model_arch.max_history_length,
-                                      self.items.size(),
-                                      self.train_history_vectorizer,
-                                      batch_size=self.batch_size,
-                                      user_id_required=self.model_arch.requires_user_id,
-                                      sequence_splitter=self.sequence_splitter,
-                                      max_user_features=self.max_user_features,
-                                      user_features_required=not (self.users_featurizer is None), 
-                                      targets_builder=self.targets_builder, 
-                                      shuffle_data=True
-                                      )
+            generator = DataGenerator(
+                train_users,
+                train_user_ids,
+                train_features,
+                self.model_arch.max_history_length,
+                self.items.size(),
+                self.train_history_vectorizer,
+                batch_size=self.batch_size,
+                user_id_required=self.model_arch.requires_user_id,
+                sequence_splitter=self.sequence_splitter,
+                max_user_features=self.max_user_features,
+                user_features_required=not (self.users_featurizer is None),
+                targets_builder=self.targets_builder,
+                shuffle_data=True,
+            )
             print(f"epoch: {epoch}")
             val_metric = self.train_epoch(generator, val_generator)
 
@@ -173,38 +219,52 @@ class DNNSequentialRecommender(Recommender):
             val_metric_history.append((total_trainig_time, val_metric))
 
             steps_since_improved += 1
-            if (self.metric.less_is_better and val_metric < best_metric_val) or\
-                        (not self.metric.less_is_better and val_metric > best_metric_val):
+            if (self.metric.less_is_better and val_metric < best_metric_val) or (
+                not self.metric.less_is_better and val_metric > best_metric_val
+            ):
                 steps_since_improved = 0
                 best_metric_val = val_metric
                 best_epoch = epoch
                 best_weights = self.model.get_weights()
-            print(f"val_{self.metric.__name__}: {val_metric:.5f}, best_{self.metric.__name__}: {best_metric_val:.5f}, steps_since_improved: {steps_since_improved},"
-                  f" total_training_time: {total_trainig_time}")
+            print(
+                f"val_{self.metric.__name__}: {val_metric:.5f}, best_{self.metric.__name__}: {best_metric_val:.5f}, steps_since_improved: {steps_since_improved},"
+                f" total_training_time: {total_trainig_time}"
+            )
             if steps_since_improved >= self.early_stop_epochs:
                 print(f"early stopped at epoch {epoch}")
                 break
 
-            if self.training_time_limit is not None and total_trainig_time > self.training_time_limit:
+            if (
+                self.training_time_limit is not None
+                and total_trainig_time > self.training_time_limit
+            ):
                 print(f"time limit stop triggered at epoch {epoch}")
                 break
 
             K.clear_session()
             gc.collect()
         self.model.set_weights(best_weights)
-        self.metadata = {"epochs_trained": best_epoch + 1, f"best_val_{self.metric.__name__}": best_metric_val,
-                         f"val_{self.metric.__name__}_history": val_metric_history}
+        self.metadata = {
+            "epochs_trained": best_epoch + 1,
+            f"best_val_{self.metric.__name__}": best_metric_val,
+            f"val_{self.metric.__name__}_history": val_metric_history,
+        }
         print(self.get_metadata())
-        print(f"taken best model from epoch{best_epoch}. best_val_{self.metric.__name__}: {best_metric_val}")
+        print(
+            f"taken best model from epoch{best_epoch}. best_val_{self.metric.__name__}: {best_metric_val}"
+        )
 
     def pass_parameters(self):
         self.loss.set_num_items(self.items.size())
         self.loss.set_batch_size(self.batch_size)
-        self.train_history_vectorizer.set_sequence_len(self.model_arch.max_history_length)
+        self.train_history_vectorizer.set_sequence_len(
+            self.model_arch.max_history_length
+        )
         self.train_history_vectorizer.set_padding_value(self.items.size())
-        self.pred_history_vectorizer.set_sequence_len(self.model_arch.max_history_length)
+        self.pred_history_vectorizer.set_sequence_len(
+            self.model_arch.max_history_length
+        )
         self.pred_history_vectorizer.set_padding_value(self.items.size())
-        
 
     def train_epoch(self, generator, val_generator):
         if not self.debug:
@@ -228,8 +288,10 @@ class DNNSequentialRecommender(Recommender):
             metric = self.metric(y_true, y_pred)
             loss_sum += loss_val
             metric_sum += metric
-            pbar.set_description(f"loss: {loss_sum/num_batches:.5f}, "
-                                 f"{self.metric.__name__}: {metric_sum/num_batches:.5f}")
+            pbar.set_description(
+                f"loss: {loss_sum/num_batches:.5f}, "
+                f"{self.metric.__name__}: {metric_sum/num_batches:.5f}"
+            )
         val_loss_sum = 0
         val_metric_sum = 0
         num_val_samples = 0
@@ -257,20 +319,28 @@ class DNNSequentialRecommender(Recommender):
         train_users = self.user_actions_by_id_list(train_user_ids, val_user_ids)
         train_features = [self.user_features.get(id, list()) for id in train_user_ids]
         val_features = [self.user_features.get(id, list()) for id in val_user_ids]
-        return train_users, train_user_ids, train_features, val_users, val_user_ids, val_features
+        return (
+            train_users,
+            train_user_ids,
+            train_features,
+            val_users,
+            val_user_ids,
+            val_features,
+        )
 
     def get_model(self, val_generator):
         self.max_user_features, self.max_user_feature_val = self.get_max_user_features()
-        self.model_arch.set_common_params(num_items=self.items.size(),
-                                          num_users=self.users.size(),
-                                          max_user_features=self.max_user_features,
-                                          user_feature_max_val=self.max_user_feature_val,
-                                          batch_size=self.batch_size,
-                                          item_features=self.item_features,
-                                          )
+        self.model_arch.set_common_params(
+            num_items=self.items.size(),
+            num_users=self.users.size(),
+            max_user_features=self.max_user_features,
+            user_feature_max_val=self.max_user_feature_val,
+            batch_size=self.batch_size,
+            item_features=self.item_features,
+        )
         model = self.model_arch.get_model()
 
-        #call the model first time in order to build it
+        # call the model first time in order to build it
         X, y = val_generator[0]
         model(X)
         return model
@@ -288,11 +358,13 @@ class DNNSequentialRecommender(Recommender):
             scores = self.get_all_item_scores(user_id)
             user_result = []
             for item_id in request.item_ids:
-                if (self.items.has_item(item_id)) and (self.items.get_id(item_id) < len(scores)):
+                if (self.items.has_item(item_id)) and (
+                    self.items.get_id(item_id) < len(scores)
+                ):
                     user_result.append((item_id, scores[self.items.get_id(item_id)]))
                 else:
                     user_result.append((item_id, float("-inf")))
-            user_result.sort(key = lambda x: -x[1])
+            user_result.sort(key=lambda x: -x[1])
             result[user_id] = user_result
         return result
 
@@ -303,17 +375,19 @@ class DNNSequentialRecommender(Recommender):
         session = self.pred_history_vectorizer(model_actions)
         session = session.reshape(1, self.model_arch.max_history_length)
         model_inputs = [session]
-        if (self.model_arch.requires_user_id):
+        if self.model_arch.requires_user_id:
             model_inputs.append(np.array([[self.users.get_id(user_id)]]))
 
         if self.users_featurizer is not None:
             user_features = self.user_features.get(self.users.get_id(user_id), list())
-            features_vector = DataGenerator.get_features_matrix([user_features], self.max_user_features)
+            features_vector = DataGenerator.get_features_matrix(
+                [user_features], self.max_user_features
+            )
             model_inputs.append(features_vector)
 
-        if hasattr(self.model, 'score_all_items'):
+        if hasattr(self.model, "score_all_items"):
             scores = self.model.score_all_items(model_inputs)[0].numpy()
-        else: 
+        else:
             scores = self.model(model_inputs)[0].numpy()
         return scores
 

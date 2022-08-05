@@ -1,4 +1,6 @@
 import json
+
+
 class Action(object):
     def __init__(self, user_id, item_id, timestamp, data=None):
         if data is None:
@@ -9,32 +11,33 @@ class Action(object):
         self.timestamp = timestamp
 
     def to_str(self):
-       result = "Action(uid={}, item={}, ts={}".format(
-                    self.user_id, 
-                    self.item_id, 
-                    self.timestamp)
-       if self.data != {}:
-           result += ", data={}".format(str(self.data))
-       result += ")"
-       return result
+        result = "Action(uid={}, item={}, ts={}".format(
+            self.user_id, self.item_id, self.timestamp
+        )
+        if self.data != {}:
+            result += ", data={}".format(str(self.data))
+        result += ")"
+        return result
 
     def to_json(self):
         try:
-            #check if data is json serializable
+            # check if data is json serializable
             json.dumps(self.data)
             data = self.data
 
         except:
-            #fallback to just string representation
-            #TODO: restore may work incorrectly with some datasets
+            # fallback to just string representation
+            # TODO: restore may work incorrectly with some datasets
             data = str(self.data)
 
-        return json.dumps({
-            "user_id": self.user_id,
-            "item_id": self.item_id,
-            "data": data,
-            "timestamp": self.timestamp
-        })
+        return json.dumps(
+            {
+                "user_id": self.user_id,
+                "item_id": self.item_id,
+                "data": data,
+                "timestamp": self.timestamp,
+            }
+        )
 
     @staticmethod
     def from_json(action_str):
@@ -43,7 +46,6 @@ class Action(object):
 
     def __str__(self):
         return self.to_str()
-        
+
     def __repr__(self):
         return self.to_str()
-        

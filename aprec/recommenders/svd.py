@@ -1,8 +1,10 @@
-from aprec.utils.item_id import ItemId
-from aprec.recommenders.recommender import Recommender
+import numpy as np
 from scipy.sparse import csr_matrix
 from sklearn.decomposition import TruncatedSVD
-import numpy as np
+
+from aprec.recommenders.recommender import Recommender
+from aprec.utils.item_id import ItemId
+
 
 class SvdRecommender(Recommender):
     def __init__(self, num_latent_components, random_seed=None):
@@ -13,12 +15,12 @@ class SvdRecommender(Recommender):
         self.rows = []
         self.cols = []
         self.vals = []
-        self.model = None 
+        self.model = None
         self.user_vectors = None
         self.mean_user = None
         self.random_seed = random_seed
         self.biases = None
-        
+
     def name(self):
         return "Svd@{}".format(self.latent_components)
 
@@ -34,9 +36,11 @@ class SvdRecommender(Recommender):
         self.biases = np.asarray(np.mean(matrix_original, axis=0))[0]
         vals_unbiased = []
         for i in range(len(self.vals)):
-            vals_unbiased.append(1.0  - self.biases[self.cols[i]])
+            vals_unbiased.append(1.0 - self.biases[self.cols[i]])
         matrix = csr_matrix((vals_unbiased, (self.rows, self.cols)))
-        self.model = TruncatedSVD(n_components=self.latent_components, random_state=self.random_seed)
+        self.model = TruncatedSVD(
+            n_components=self.latent_components, random_state=self.random_seed
+        )
         self.user_vectors = self.model.fit_transform(matrix)
         self.mean_user = np.mean(self.user_vectors, axis=0)
 
@@ -60,7 +64,6 @@ class SvdRecommender(Recommender):
             result[request.user_id] = user_result
         return result
 
-
     def get_all_item_scores(self, user_id):
         user_vec = self.mean_user
         if self.users.has_item(user_id):
@@ -68,12 +71,11 @@ class SvdRecommender(Recommender):
         scores = self.model.inverse_transform([user_vec])[0] + self.biases
         return scores
 
-
     def get_similar_items(self, item_id, limit):
-        raise(NotImplementedError)
+        raise (NotImplementedError)
 
     def to_str(self):
-        raise(NotImplementedError)
+        raise (NotImplementedError)
 
     def from_str(self):
-        raise(NotImplementedError)
+        raise (NotImplementedError)

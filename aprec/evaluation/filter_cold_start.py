@@ -16,4 +16,3 @@ def filter_cold_start(train_actions, test_actions):
     print("number of cold start users filtered: {}".format(len(cold_start_set)))
     print("number of users in test set: {}".format(len(non_cold_start)))
     return result
-

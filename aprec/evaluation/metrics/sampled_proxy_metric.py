@@ -1,11 +1,11 @@
 import random
-from collections import defaultdict, Counter
+from collections import Counter, defaultdict
 
 import numpy as np
 
 from .metric import Metric
 
-#this proxy is used to match BERT4rec evaluation strategy,
+# this proxy is used to match BERT4rec evaluation strategy,
 # in order to be able to compare our models evaluation to what they report in the paper
 # In their code they randomly sample 100 items out of full items list, add relevant items and then calculate metrics.
 # for the items outside of returned recommendations,
@@ -22,7 +22,7 @@ class SampledProxy(Metric):
 
     def __call__(self, recommendations, actual_actions):
         rec_dict = {}
-        min_score = float('inf')
+        min_score = float("inf")
         for item, score in recommendations:
             rec_dict[item] = score
             min_score = min(min_score, score)
@@ -30,15 +30,27 @@ class SampledProxy(Metric):
         recs = []
         recommended = set()
         for action in actual_actions:
-            recs.append((action.item_id, self.get_item_score(action.item_id, min_score, rec_dict)))
+            recs.append(
+                (
+                    action.item_id,
+                    self.get_item_score(action.item_id, min_score, rec_dict),
+                )
+            )
             recommended.add(action.item_id)
 
         target_size = len(actual_actions) + self.n_negatives
-        while(len(recommended) < target_size):
-            item_ids = np.random.choice(self.item_ids,  target_size - len(recommended), p=self.probs, replace=False)
+        while len(recommended) < target_size:
+            item_ids = np.random.choice(
+                self.item_ids,
+                target_size - len(recommended),
+                p=self.probs,
+                replace=False,
+            )
             for item_id in item_ids:
                 if item_id not in recommended:
-                    recs.append((item_id, self.get_item_score(item_id, min_score, rec_dict)))
+                    recs.append(
+                        (item_id, self.get_item_score(item_id, min_score, rec_dict))
+                    )
                     recommended.add(item_id)
         recs.sort(key=lambda x: -x[1])
         return self.metric(recs, actual_actions)
@@ -56,8 +68,6 @@ class SampledProxy(Metric):
             items.append(item)
             probs.append(item_cnt / cnt)
         return items, probs
-
-
 
     @staticmethod
     def get_item_score(item_id, min_score, rec_dict):

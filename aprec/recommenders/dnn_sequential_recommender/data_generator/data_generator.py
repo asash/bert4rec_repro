@@ -2,23 +2,34 @@ import random
 
 import numpy as np
 from tensorflow.python.keras.utils.data_utils import Sequence
-from aprec.recommenders.dnn_sequential_recommender.target_builders.full_matrix_targets_builder import FullMatrixTargetsBuilder
 
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.random_fraction_splitter import RandomFractionSplitter
+from aprec.recommenders.dnn_sequential_recommender.target_builders.full_matrix_targets_builder import (
+    FullMatrixTargetsBuilder,
+)
+from aprec.recommenders.dnn_sequential_recommender.targetsplitters.random_fraction_splitter import (
+    RandomFractionSplitter,
+)
+
 
 class DataGenerator(Sequence):
-    def __init__(self, user_actions, user_ids,  user_features, history_size,
-                 n_items, 
-                 history_vectorizer,
-                 batch_size=1000,
-                 return_drect_positions=False, return_reverse_positions=False,
-                 user_id_required=False,
-                 max_user_features=0,
-                 user_features_required=False, 
-                 sequence_splitter = RandomFractionSplitter, 
-                 targets_builder = FullMatrixTargetsBuilder,
-                 shuffle_data = True
-                 ):
+    def __init__(
+        self,
+        user_actions,
+        user_ids,
+        user_features,
+        history_size,
+        n_items,
+        history_vectorizer,
+        batch_size=1000,
+        return_drect_positions=False,
+        return_reverse_positions=False,
+        user_id_required=False,
+        max_user_features=0,
+        user_features_required=False,
+        sequence_splitter=RandomFractionSplitter,
+        targets_builder=FullMatrixTargetsBuilder,
+        shuffle_data=True,
+    ):
         self.user_ids = [[id] for id in user_ids]
         self.user_actions = user_actions
         self.history_size = history_size
@@ -40,17 +51,20 @@ class DataGenerator(Sequence):
         self.history_vectorizer = history_vectorizer
         self.reset()
 
-
     def reset(self):
-        if self.do_shuffle_data: 
+        if self.do_shuffle_data:
             self.shuffle_data()
         history, target = self.split_actions(self.user_actions)
         self.sequences_matrix = self.matrix_for_embedding(history)
         if self.return_direct_positions or self.return_reverse_positions:
-            self.direct_position, self.reverse_position = self.positions(history, self.history_size)
+            self.direct_position, self.reverse_position = self.positions(
+                history, self.history_size
+            )
 
         if self.user_features_required:
-            self.user_features_matrix = self.get_features_matrix(self.user_features, self.max_user_features)
+            self.user_features_matrix = self.get_features_matrix(
+                self.user_features, self.max_user_features
+            )
 
         self.targets_builder.set_n_items(self.n_items)
         self.targets_builder.build(target)
@@ -58,7 +72,9 @@ class DataGenerator(Sequence):
         self.max = self.__len__()
 
     def shuffle_data(self):
-        actions_with_ids_and_features = list(zip(self.user_actions, self.user_ids, self.user_features))
+        actions_with_ids_and_features = list(
+            zip(self.user_actions, self.user_ids, self.user_features)
+        )
         random.shuffle(actions_with_ids_and_features)
         user_actions, user_ids, user_features = zip(*actions_with_ids_and_features)
 
@@ -72,7 +88,6 @@ class DataGenerator(Sequence):
         for features in user_features:
             result.append([0] * (max_user_features - len(features)) + features)
         return np.array(result)
-
 
     def matrix_for_embedding(self, user_actions):
         result = []
@@ -128,7 +143,7 @@ class DataGenerator(Sequence):
         target_inputs, target = self.targets_builder.get_targets(start, end)
         model_inputs += target_inputs
 
-        return model_inputs, target 
+        return model_inputs, target
 
     def __next__(self):
         if self.current_position >= self.max:
@@ -136,6 +151,7 @@ class DataGenerator(Sequence):
         result = self.__getitem__(self.current_position)
         self.current_position += 1
         return result
+
 
 def direct_positions(session_len, history_size):
     if session_len >= history_size:
