@@ -2,9 +2,7 @@ from random import Random
 
 import numpy as np
 
-from aprec.recommenders.dnn_sequential_recommender.target_builders.target_builders import (
-    TargetBuilder,
-)
+from .target_builders import TargetBuilder
 
 
 class NegativePerPositiveTargetBuilder(TargetBuilder):
@@ -25,7 +23,7 @@ class NegativePerPositiveTargetBuilder(TargetBuilder):
                     self.sequence_len - len(seq)
                 )
                 targets_for_user += [[-1.0, -1.0]] * (self.sequence_len - len(seq))
-            for target in seq[-self.sequence_len :]:
+            for target in seq[-self.sequence_len:]:
                 positive = target[1]
                 negative = self.random.randint(0, self.n_items - 1)
                 while negative == positive:

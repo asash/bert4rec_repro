@@ -1,11 +1,12 @@
 import logging
 import os
+from typing import Iterator
 
 from aprec.api.action import Action
 from aprec.api.catalog import Catalog
 from aprec.api.item import Item
 from aprec.datasets.download_file import download_file
-from aprec.utils.os_utils import console_logging, get_dir, mkdir_p_local, shell
+from aprec.utils.os_utils import console_logging, get_dir, shell
 
 DATASET_NAME = "ml-20m"
 MOVIELENS_URL = "http://files.grouplens.org/datasets/movielens/{}.zip".format(
@@ -19,7 +20,7 @@ RATINGS_FILE = os.path.join(MOVIELENS_DIR_ABSPATH, "ratings.csv")
 MOVIES_FILE = os.path.join(MOVIELENS_DIR_ABSPATH, "movies.csv")
 
 
-def extract_movielens_dataset():
+def extract_movielens_dataset() -> None:
     if os.path.isfile(RATINGS_FILE):
         logging.info("movielens dataset is already extracted")
         return
@@ -34,12 +35,12 @@ def extract_movielens_dataset():
     shell("rm -rf {}".format(dataset_dir))
 
 
-def prepare_data():
+def prepare_data() -> None:
     download_file(MOVIELENS_URL, MOVIELENS_FILE, MOVIELENS_DIR)
     extract_movielens_dataset()
 
 
-def get_movielens20m_actions(min_rating=4.0):
+def get_movielens20m_actions(min_rating: float = 4.0) -> Iterator[Action]:
     prepare_data()
     with open(RATINGS_FILE, "r") as data_file:
         header = True
@@ -54,7 +55,7 @@ def get_movielens20m_actions(min_rating=4.0):
                     yield Action(user_id, movie_id, timestamp, {"rating": rating})
 
 
-def get_movies_catalog():
+def get_movies_catalog() -> Catalog:
     prepare_data()
     catalog = Catalog()
     with open(MOVIES_FILE, "r") as data_file:

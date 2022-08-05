@@ -3,9 +3,8 @@ import tensorflow as tf
 from keras import Model
 from transformers import DebertaConfig, TFDebertaForMaskedLM
 
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
-    SequentialRecsysModel,
-)
+from aprec.recommenders.dnn_sequential_recommender.models \
+    .sequential_recsys_model import SequentialRecsysModel
 
 
 class Deberta4Rec(SequentialRecsysModel):

@@ -1,16 +1,18 @@
+from typing import Callable
 
 import numpy as np
 
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import (
-    TargetSplitter,
-)
+from .targetsplitter import TargetSplitter
 
 
-def exponential_importance(p):
-    return lambda n, k: p ** (n - k)
+def exponential_importance(p: float) -> Callable[[float, float], float]:
+    def exponential_importance_func(n: float, k: float) -> float:
+        res: float = p ** (n - k)
+        return res
+    return exponential_importance_func
 
 
-def linear_importance(a=1, b=1):
+def linear_importance(a: float = 1, b: float = 1) -> Callable[[float, float], float]:
     return lambda n, k: a * k + b
 
 
@@ -31,8 +33,13 @@ class RecencySequenceSampling(TargetSplitter):
             return [], []
         target = set()
         cnt = max(1, int(len(sequence) * self.max_pct))
-        f = lambda j: self.recency_iportnace(len(sequence), j)
-        f_vals = np.array([f(i) for i in range(len(sequence))])
+
+        def recency_importance_func(j: int) -> float:
+            res: float = self.recency_iportnace(len(sequence), j)
+            return res
+
+        f_vals = np.array([recency_importance_func(i)
+                           for i in range(len(sequence))])
         f_sum = sum(f_vals)
         sampled_idx = set(
             self.random.choice(

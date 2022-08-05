@@ -92,7 +92,8 @@ class VanillaBERT4Rec(Recommender):
             user_str, doc = self.get_bert4rec_doc(user)
             doc_for_prediction = doc + pred_item
 
-            # mask_last code in the vanilla bert4rec implementation requires at least two docs in the collection
+            # mask_last code in the vanilla bert4rec implementation requires
+            # at least two docs in the collection
             if len(doc) > 1:
                 bert4rec_docs[user_str] = doc
 

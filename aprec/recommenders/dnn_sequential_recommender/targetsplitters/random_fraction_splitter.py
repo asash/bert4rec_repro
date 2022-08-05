@@ -1,8 +1,6 @@
 from random import Random
 
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import (
-    TargetSplitter,
-)
+from .targetsplitter import TargetSplitter
 
 
 class RandomFractionSplitter(TargetSplitter):

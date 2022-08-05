@@ -1,11 +1,13 @@
 from argparse import ArgumentParser
 from collections import defaultdict
+from typing import Any, Dict, Iterable, List, Optional
 
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from aprec.datasets.datasets_register import DatasetsRegister
+from aprec.api.action import Action
+from .datasets_register import DatasetsRegister
 
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 pd.set_option("display.expand_frame_repr", False)
@@ -44,7 +46,7 @@ def p80_session_len(user, items, session_lens):
     return float(np.percentile(session_lens, 80))
 
 
-def sparsity(users, items, session_lens):
+def sparsity(users, items, session_lens) -> float:
     sum_interacted = 0
     for user in users:
         interacted_items = len(set(users[user]))
@@ -65,7 +67,9 @@ all_metrics = {
 }
 
 
-def dataset_stats(dataset, metrics, dataset_name=None):
+def dataset_stats(dataset: Iterable[Action],
+                  metrics: List[str],
+                  dataset_name: Optional[str] = None) -> Dict[str, Any]:
     users = defaultdict(list)
     item_ids = set()
     for action in dataset:

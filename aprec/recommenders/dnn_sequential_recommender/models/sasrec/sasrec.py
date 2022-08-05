@@ -24,7 +24,8 @@ class SASRec(SequentialRecsysModel):
         # sequence embedding and for the embedding matrix
         encode_output_embeddings=False,  # encode item embeddings with a dense layer
         # may be useful if we reuse item embeddings
-        vanilla=False,  # vanilla sasrec model uses shifted sequence prediction at the training time.
+        vanilla=False,  # vanilla sasrec model uses shifted sequence prediction
+                        # at the training time.
         sampled_targets=None,
     ):
         super().__init__(output_layer_activation, embedding_size, max_history_len)
@@ -71,15 +72,13 @@ class OwnSasrecModel(keras.Model):
         encode_output_embeddings=False,
         sampled_target=None,
         vanilla=False,  # vanilla implementation;
-        # at the training time we calculate one positive and one negative per sequence element
+        # at the training time we calculate one positive
+        # and one negative per sequence element
         *args,
         **kwargs
     ):
         super().__init__(*args, **kwargs)
-        assert (
-            not (vanilla and sampled_target),
-            "only vanilla or sampled targetd strategy can be used at once",
-        )
+        assert not (vanilla and sampled_target)
         self.output_layer_activation = output_layer_activation
         self.embedding_size = embedding_size
         self.max_history_length = max_history_length

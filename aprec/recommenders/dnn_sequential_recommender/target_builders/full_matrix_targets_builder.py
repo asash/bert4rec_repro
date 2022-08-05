@@ -1,9 +1,7 @@
 import numpy as np
 from scipy.sparse.csr import csr_matrix
 
-from aprec.recommenders.dnn_sequential_recommender.target_builders.target_builders import (
-    TargetBuilder,
-)
+from .target_builders import TargetBuilder
 
 
 class FullMatrixTargetsBuilder(TargetBuilder):

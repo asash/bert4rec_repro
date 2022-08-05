@@ -1,7 +1,8 @@
 import tensorflow as tf
 
 
-# this version of multihead attention was ported from the original SASRec implementation,
+# this version of multihead attention was ported
+# from the original SASRec implementation,
 # as it does some non-standard transformations, including 'casuality' one
 def multihead_attention(
     queries,

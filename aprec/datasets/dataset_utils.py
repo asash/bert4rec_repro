@@ -2,13 +2,16 @@ import gzip
 import logging
 import os
 from collections import Counter
+from typing import Iterator
 
-from aprec.utils.os_utils import get_dir, mkdir_p, mkdir_p_local, shell
+from aprec.utils.os_utils import get_dir, mkdir_p, shell
+from aprec.api.action import Action
 
 
-def filter_popular_items(actions_generator, max_actions):
+def filter_popular_items(actions_generator: Iterator[Action],
+                         max_actions: int) -> Iterator[Action]:
     actions = []
-    items_counter = Counter()
+    items_counter: Counter = Counter()
     for action in actions_generator:
         actions.append(action)
         items_counter[action.item_id] += 1
@@ -18,9 +21,10 @@ def filter_popular_items(actions_generator, max_actions):
     return filter(lambda action: action.item_id in popular_items, actions)
 
 
-def filter_cold_users(actions_generator, min_actions_per_user=0):
+def filter_cold_users(actions_generator: Iterator[Action],
+                      min_actions_per_user: int = 0) -> Iterator[Action]:
     actions = []
-    user_counter = Counter()
+    user_counter: Counter = Counter()
     for action in actions_generator:
         actions.append(action)
         user_counter[action.user_id] += 1
@@ -29,7 +33,7 @@ def filter_cold_users(actions_generator, min_actions_per_user=0):
     )
 
 
-def unzip(zipped_file, unzip_dir):
+def unzip(zipped_file: str, unzip_dir: str) -> str:
     full_dir_name = os.path.join(get_dir(), unzip_dir)
     if os.path.isdir(full_dir_name):
         logging.info(f"{unzip_dir} already exists, skipping")
@@ -39,7 +43,7 @@ def unzip(zipped_file, unzip_dir):
     return full_dir_name
 
 
-def gunzip(gzip_file):
+def gunzip(gzip_file: str) -> str:
     full_file_name = os.path.abspath(gzip_file)
     if not (gzip_file.endswith(".gz")):
         raise Exception(f"{gzip_file} is not a gzip file")

@@ -2,9 +2,7 @@ import copy
 
 import numpy as np
 
-from aprec.recommenders.dnn_sequential_recommender.targetsplitters.targetsplitter import (
-    TargetSplitter,
-)
+from .targetsplitter import TargetSplitter
 
 
 class ItemsMasking(TargetSplitter):
@@ -26,7 +24,7 @@ class ItemsMasking(TargetSplitter):
         self.recency_importance = recency_importance
 
     def split(self, sequence):
-        seq = sequence[-self.seqence_len :]
+        seq = sequence[-self.seqence_len:]
         seq_len = len(seq)
 
         if len(seq) < self.seqence_len:

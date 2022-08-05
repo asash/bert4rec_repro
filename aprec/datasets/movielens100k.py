@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Iterator
 
 from aprec.api.action import Action
 from aprec.datasets.download_file import download_file
@@ -16,7 +17,7 @@ MOVIELENS_DIR_ABSPATH = os.path.join(get_dir(), MOVIELENS_DIR)
 RATINGS_FILE = os.path.join(MOVIELENS_DIR_ABSPATH, "u.data")
 
 
-def extract_movielens_dataset():
+def extract_movielens_dataset() -> None:
     if os.path.isfile(RATINGS_FILE):
         logging.info("movielens dataset is already extracted")
         return
@@ -31,12 +32,12 @@ def extract_movielens_dataset():
     shell("rm -rf {}".format(dataset_dir))
 
 
-def prepare_data():
+def prepare_data() -> None:
     download_file(MOVIELENS_URL, MOVIELENS_FILE, MOVIELENS_DIR)
     extract_movielens_dataset()
 
 
-def get_movielens100k_actions(min_rating=4.0):
+def get_movielens100k_actions(min_rating: float = 4.0) -> Iterator[Action]:
     prepare_data()
     with open(RATINGS_FILE, "r") as data_file:
         i = 0

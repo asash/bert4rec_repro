@@ -1,9 +1,7 @@
 import keras.layers as layers
 from keras.models import Sequential
 
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
-    SequentialRecsysModel,
-)
+from .sequential_recsys_model import SequentialRecsysModel
 
 
 class SequentialMLPModel(SequentialRecsysModel):

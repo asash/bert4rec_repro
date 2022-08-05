@@ -1,5 +1,6 @@
 from xmlrpc.client import Boolean
 
+import keras
 import numpy as np
 import tensorflow as tf
 from keras import Model, activations
@@ -13,11 +14,8 @@ from keras.layers import (
     LayerNormalization,
     Permute,
 )
-from transformers.models.bert.modeling_tf_bert import BertConfig, TFBertMLMHead
 
-from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import (
-    SequentialRecsysModel,
-)
+from .sequential_recsys_model import SequentialRecsysModel
 
 
 class RecsysMixer(SequentialRecsysModel):

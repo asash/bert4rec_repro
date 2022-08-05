@@ -1,8 +1,4 @@
 
-import numpy as np
-from scipy.sparse.csr import csr_matrix
-
-
 class TargetBuilder(object):
     def __init__(self):
         pass
