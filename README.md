@@ -77,7 +77,7 @@ git clone git@github.com:asash/b4rvae.git b4rvae
 git clone git@github.com:asash/bert4rec_repro.git aprec
 ```
 
-### Download Yelp Dataset
+### 8. Download Yelp Dataset
 Create folder for the dataset: 
 ```
   mkdir -p aprec/data/yelp
@@ -93,7 +93,7 @@ put it to the freshly created dataset folder `aprec/data/yelp`
 
 
 
-### 8. Test the code
+### 9. Test the code
 Your environment is now ready to run the experiments. To ensure that everything works correctly, run the tests:
 
 ```
