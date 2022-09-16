@@ -1,6 +1,13 @@
-# A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation
+### This is a joint code repository for two papers published at 16th ACM Conference on Recommender Systems 
+(Seattle, WA, USA, 18th-23rd September 2022)
 
-This repository contains the code and the documentation necessary to replicate our results reported in our RecSys 2022 paper **"A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation"** ([paper link](https://arxiv.org/abs/2207.07483)). 
+**1.Effective and Efficient Training for Sequential Recommendation using Recency Sampling**
+Aleksandr Petrov (University of Glasgow, United Kingdom) and Craig Macdonald (University of Glasgow, United Kingdom)
+([paper link](https://arxiv.org/abs/2207.02643)). 
+
+**A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation**
+Aleksandr Petrov (University of Glasgow, United Kingdom) and Craig Macdonald (University of Glasgow, United Kingdom)
+([paper link](https://arxiv.org/abs/2207.07483)). 
 
 
 The code includes benchmark of three available BERT4Rec implementations, as well as our own implementation of BERT4Rec based on Hugging Face Transformers library. 
