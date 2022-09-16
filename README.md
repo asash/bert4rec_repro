@@ -40,7 +40,11 @@ cd aprec_repro
 
 ### 3. Create an anaconda environment with necessary package versions:
 ```
-conda create -y -c pytorch -c conda-forge --name aprec_repro python=3.9.12 cudnn=8.2.1.32 cudatoolkit=11.6.0  pytorch-gpu=1.10.0 tensorflow-gpu=2.6.2 gh=2.1.0 expect=5.45.4
+conda create -y -c pytorch -c conda-forge --name aprec_repro python=3.9.12 cudnn=8.2.1.32 cudatoolkit=11.6.0
+conda install pytorch-gpu=1.10.0
+conda install tensorflow-gpu=2.6.2
+conda install gh=2.1.0 
+conda install expect=5.45.4
 ```
 
 ### 4. Add working working directory to the PYTHONPATH of the anaconda environment: 
