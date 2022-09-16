@@ -191,15 +191,15 @@ The model itself is quite simple and can be found in this [file](https://github.
 
 # Experiment configrations for Recency Sampling paper:  
 
-| Experiment                                       | Dataset | Models in the experiment                                                                                                            |
+| Experiment                                       | Dataset | Training time limit (hours) | Models in the experiment                                                                                                            |
 |--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
-| configs/configs/booking_benchmark.py   | Booking.com  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
-| configs/configs/booking_benchmark_bert4rec16h.py   | Booking.com  | BERT4Rec-16h |
-| configs/configs/yelp_benchmark.py   | yelp  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
-| configs/configs/yelp_benchmark_bert4rec_16h.py   | yelp  | BERT4Rec-16h |
-| configs/configs/ml_benchmark20m.py   | MovieLens-20M  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
-| configs/configs/ml_benchmark20m_bert4rec16h.py   | MovieLens-20M  | BERT4Rec-16h |
-| configs/configs/gowalla_benchmark.py   | Gowalla  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/booking_benchmark.py   | Booking.com  | 1  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/booking_benchmark_bert4rec16h.py   | 16 | Booking.com  | BERT4Rec-16h |
+| configs/configs/yelp_benchmark.py   | yelp  | 1 |  Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/yelp_benchmark_bert4rec_16h.py  | 16 | yelp  | BERT4Rec-16h |
+| configs/configs/ml_benchmark20m.py   | MovieLens-20M | 1 | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/ml_benchmark20m_bert4rec16h.py   | 16 | MovieLens-20M  | BERT4Rec-16h |
+| configs/configs/gowalla_benchmark.py   | Gowalla  | 1 | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
 
 
 
