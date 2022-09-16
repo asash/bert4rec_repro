@@ -13,7 +13,17 @@ Aleksandr Petrov (University of Glasgow, United Kingdom) and Craig Macdonald (Un
 The code includes benchmark of three available BERT4Rec implementations, as well as our own implementation of BERT4Rec based on Hugging Face Transformers library. 
 
 
-if you use any part of this code, please cite using following BibTex: 
+if you use any part of this code, please cite one or both papers  of the papers using following BibTex: 
+
+```
+@inproceedings{petrov2022recencysampling,
+  title={Effective and Efficient Training for Sequential Recommendation using Recency Sampling},
+  author={Petrov, Aleksandr and Macdonald, Craig},
+  booktitle={Sixteen ACM Conference on Recommender Systems},
+  year={2022}
+}
+```
+
 
 ```
 @inproceedings{petrov2022replicability,
@@ -23,6 +33,9 @@ if you use any part of this code, please cite using following BibTex:
   year={2022}
 }
 ```
+
+
+
 
 ## Systematic review
 Spreadsheed with systematic comparison of BERT4Rec and SASRec can be found by the link: 
