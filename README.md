@@ -191,7 +191,6 @@ The model itself is quite simple and can be found in this [file](https://github.
 
 # Experiment configrations for Recency Sampling paper:  
 
-# Experiment configurations for reproducing the Replicability paper results: 
 | Experiment                                       | Dataset | Models in the experiment                                                                                                            |
 |--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
 | configs/configs/booking_benchmark.py   | Booking.com  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
@@ -203,6 +202,8 @@ The model itself is quite simple and can be found in this [file](https://github.
 | configs/configs/gowalla_benchmark.py   | Gowalla  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
 
 
+
+# Experiment configurations for reproducing the Replicability paper results: 
 ## RQ1. Default BERT4Rec configurations
 
 
