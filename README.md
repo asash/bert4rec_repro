@@ -1,11 +1,12 @@
 ### This is a joint code repository for two papers published at 16th ACM Conference on Recommender Systems 
 (Seattle, WA, USA, 18th-23rd September 2022)
 
-**1.Effective and Efficient Training for Sequential Recommendation using Recency Sampling**
-Aleksandr Petrov (University of Glasgow, United Kingdom) and Craig Macdonald (University of Glasgow, United Kingdom)
+**1. Effective and Efficient Training for Sequential Recommendation using Recency Sampling**
+[Aleksandr Petrov](https://scholar.google.com/citations?user=Cw7DY8IAAAAJ&hl=en) (University of Glasgow, United Kingdom)
+and [Craig Macdonald](https://scholar.google.com/citations?user=IBjMKHQAAAAJ&hl=en) (University of Glasgow, United Kingdom)
 ([paper link](https://arxiv.org/abs/2207.02643)). 
 
-**A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation**
+**2. A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation**
 Aleksandr Petrov (University of Glasgow, United Kingdom) and Craig Macdonald (University of Glasgow, United Kingdom)
 ([paper link](https://arxiv.org/abs/2207.07483)). 
 
