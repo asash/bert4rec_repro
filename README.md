@@ -38,10 +38,6 @@ if you use any part of this code, please cite one or both papers  of the papers 
 
 
 
-## Systematic review
-Spreadsheed with systematic comparison of BERT4Rec and SASRec can be found by the link: 
-https://github.com/asash/bert4rec_repro/blob/main/Systematic%20Review.xlsx?raw=true
-
 ## Installation 
 The instruction has been tested on an Ubuntu 22.04 LTS machine with an NVIDIA RTX 3090 GPU. 
 
@@ -219,6 +215,10 @@ The model itself is quite simple and can be found in this [file](https://github.
 | ml_1m_original_6400000steps.py                   | ML-1M   | Original BERT4Rec (6400000 training steps)                                                                                          |
 | ml_1m_original_12800000steps.py                  | ML-1M   | Original BERT4Rec (12800000 training steps)                                                                                         |
 
+
+## Systematic review of BERT4Rec and SASRec
+Spreadsheed with systematic comparison of BERT4Rec and SASRec can be found by the link: 
+https://github.com/asash/bert4rec_repro/blob/main/Systematic%20Review.xlsx?raw=true
 
 
 ## RQ3. Other Transformers. 
