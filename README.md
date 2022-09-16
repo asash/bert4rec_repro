@@ -189,7 +189,18 @@ More examples how to configure models can be found in [tests](https://github.com
 
 The model itself is quite simple and can be found in this [file](https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/models/bert4rec/bert4rec.py). We also provide implementations of ALBERT4Rec ([code](https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/models/albert4rec/albert4rec.py), [example config](https://github.com/asash/bert4rec_repro/blob/main/evaluation/configs/bert4rec_repro_paper/ml_1m_albert.py)) and DeBERTa4Rec ([code](https://github.com/asash/bert4rec_repro/blob/main/recommenders/dnn_sequential_recommender/models/deberta4rec/deberta4rec.py), [test](https://github.com/asash/bert4rec_repro/blob/main/tests/test_deberta4rec.py), [example config](https://github.com/asash/bert4rec_repro/blob/main/evaluation/configs/bert4rec_repro_paper/ml_1m_deberta.py))
 
-# Experiment configurations for reproducing the  paper results: 
+# Experiment configrations for Recency Sampling paper:  
+
+# Experiment configurations for reproducing the Replicability paper results: 
+| Experiment                                       | Dataset | Models in the experiment                                                                                                            |
+|--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
+| configs/configs/booking_benchmark.py   | Booking.com  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/booking_benchmark_bert4rec16h.py   | Booking.com  | BERT4Rec-16h |
+| configs/configs/yelp_benchmark.py   | yelp  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/yelp_benchmark_bert4rec_16h.py   | yelp  | BERT4Rec-16h |
+| configs/configs/ml_benchmark20m.py   | MovieLens-20M  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
+| configs/configs/ml_benchmark20m_bert4rec16h.py   | MovieLens-20M  | BERT4Rec-16h |
+| configs/configs/gowalla_benchmark.py   | Gowalla  | Baselines (Top popular; MF-BPR, SASRec); BERT4Rec-1h; GRU4rec, Caser, Sasrec with lambdarank/bce loss and Continuation/RSS objective |
 
 
 ## RQ1. Default BERT4Rec configurations
@@ -197,10 +208,10 @@ The model itself is quite simple and can be found in this [file](https://github.
 
 | Experiment                                       | Dataset | Models in the experiment                                                                                                            |
 |--------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------|
-| configs/bert4rec_repro_paper/ml_benchmark1m.py   | ML-1M   | Baselines (MF-BPR, SASRec), 5 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours, Ours-longer-seq) |
+| configs/bert4rec_repro_paper/ml_benchmark1m.py   | MovieLens-1M   | Baselines (MF-BPR, SASRec), 5 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours, Ours-longer-seq) |
 | configs/bert4rec_repro_paper/beauty_benchmark.py | Beauty  | Baselines (MF-BPR, SASRec), 4 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours)                  |
 | configs/bert4rec_repro_paper/steam_benchmark.py  | Steam   | Baselines (MF-BPR, SASRec), 4 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours)                  |
-| configs/bert4rec_repro_paper/ml_20m_benchmark.py | ML-20M  | Baselines (MF-BPR, SASRec), 5 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours, Ours-longer-seq) |
+| configs/bert4rec_repro_paper/ml_20m_benchmark.py | MovieLens-20M  | Baselines (MF-BPR, SASRec), 5 BERT4Rec versions with default configuration (Original, BERT4Rec-Vae, Recbole, Ours, Ours-longer-seq) |
 
 
 ## RQ2. Original BERT4Rec training time. 
