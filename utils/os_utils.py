@@ -31,6 +31,7 @@ def mkdir_p_local(relative_dir_path):
     local_dir = get_dir()
     abspath = os.path.join(local_dir, relative_dir_path)
     mkdir_p(abspath)
+    return abspath
 
 
 def file_md5(fname):

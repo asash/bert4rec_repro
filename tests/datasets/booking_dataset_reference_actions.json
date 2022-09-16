@@ -1,0 +1,62 @@
+[
+    {
+        "user_id": "1000027_1",
+        "item_id": "8183",
+        "data": {
+            "user_id": "1000027",
+            "device_class": "desktop",
+            "affiliate_id": "7168",
+            "hotel_country": "Gondal",
+            "booker_country": "Elbonia",
+            "checkin_date": 1471046400.0,
+            "checkout_date": 1471132800.0,
+            "is_control": false
+        },
+        "timestamp": 1471046400.0
+    },
+    {
+        "user_id": "1000027_1",
+        "item_id": "15626",
+        "data": {
+            "user_id": "1000027",
+            "device_class": "desktop",
+            "affiliate_id": "7168",
+            "hotel_country": "Gondal",
+            "booker_country": "Elbonia",
+            "checkin_date": 1471132800.0,
+            "checkout_date": 1471305600.0,
+            "is_control": false
+        },
+        "timestamp": 1471132800.0
+    },
+    {
+        "user_id": "1000066_2",
+        "item_id": "56430",
+        "data": {
+            "user_id": "1000066",
+            "device_class": "desktop",
+            "affiliate_id": "9924",
+            "hotel_country": "Urkesh",
+            "booker_country": "Gondal",
+            "checkin_date": 1469059200.0,
+            "checkout_date": 1469232000.0,
+            "is_control": true
+        },
+        "timestamp": 1469059200.0
+    },
+    {
+        "user_id": "1000066_2",
+        "item_id": "41971",
+        "data": {
+            "user_id": "1000066",
+            "device_class": "desktop",
+            "affiliate_id": "9924",
+            "hotel_country": "Urkesh",
+            "booker_country": "Gondal",
+            "checkin_date": 1469232000.0,
+            "checkout_date": 1469404800.0,
+            "is_control": true
+        },
+        "timestamp": 1469232000.0
+    }
+]
