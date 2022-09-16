@@ -78,17 +78,21 @@ git clone git@github.com:asash/bert4rec_repro.git aprec
 ```
 
 ### 8. Download Yelp Dataset
-Create folder for the dataset: 
+8.1 Create folder for the dataset: 
+
 ```
   mkdir -p aprec/data/yelp
 ```
 
-Go to https://www.yelp.com/dataset
+8.2 Go to https://www.yelp.com/dataset
 
-Click "Download" button
-Fill the form 
-Donwload JSON version of the dataset. 
-put it to the freshly created dataset folder `aprec/data/yelp`
+8.3 Click "Download" button
+
+8.4 Fill the form 
+
+8.5 Donwload JSON version of the dataset. 
+
+8.6 Put the `yelp_dataset.tar` file to the freshly created dataset folder `aprec/data/yelp`
 
 
 
