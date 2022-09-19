@@ -41,21 +41,21 @@ We hope our work becomes a resource for verifying expected BERT4Rec results. Whe
 
 ### Recall@10 (also known as HIT@10)
 |Dataset       |Uniformly Sampled, 100 negatives|Popularity sampled, 100 negatives| Unsampled |
-|--------------|--------------------------------|---------------------------------|-----------|
-|Movielens-1M  |0.8039                          |  0.6975                         | 0.2821    |
-|Movielens-20M |0.9453                          |  0.7409                         | 0.2886    |
+|--------------------------|--------------------------------|---------------------------------|-----------|
+|Movielens-1M<sup>1</sup>  |0.8039                          |  0.6975                         | 0.2821    |
+|Movielens-20M<sup>2</sup> |0.9453                          |  0.7409                         | 0.2886    |
 
 
 
 ### NDCG@10 
 |Dataset       |Uniformly Sampled, 100 negatives|Popularity sampled, 100 negatives| Unsampled |
-|--------------|--------------------------------|---------------------------------|-----------|
-|Movielens-1M  |0.6008                          |  0.4751                         | 0.1516    |
-|Movielens-20M |0.7827                          |  0.5259                         | 0.1732    |
+|----------------------------------|--------------------------------|---------------------------------|-----------|
+|Movielens-1M<sup>1</sup>          |0.6008                          |  0.4751                         | 0.1516    |
+|Movielens-20M<sup>2</sup>         |0.7827                          |  0.5259                         | 0.1732    |
 
 If your results are lower by a large margen you are likely using underfit version of BERT4Rec. 
-
-
+<sup>1</sup> Result achieved using our model from this repository, based on Hugging Face transformers
+<sup>2</sup> Result achieved using <a href="https://github.com/jaywonchung/BERT4Rec-VAE-Pytorch">BERT4Rec-Pytorch-Vae model</a>
 
 
 ## Installation 
