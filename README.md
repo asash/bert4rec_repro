@@ -54,7 +54,9 @@ We hope our work becomes a resource for verifying expected BERT4Rec results. Whe
 |Movielens-20M<sup>2</sup>         |0.7827                          |  0.5259                         | 0.1732    |
 
 If your results are lower by a large margen you are likely using underfit version of BERT4Rec. 
+
 <sup>1</sup> Result achieved using our model from this repository, based on Hugging Face transformers
+
 <sup>2</sup> Result achieved using <a href="https://github.com/jaywonchung/BERT4Rec-VAE-Pytorch">BERT4Rec-Pytorch-Vae model</a>
 
 
