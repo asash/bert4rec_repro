@@ -43,7 +43,7 @@ We hope our work becomes a resource for verifying expected BERT4Rec results. Whe
 |Dataset       |Uniformly Sampled, 100 negatives|Popularity sampled, 100 negatives| Unsampled |
 |--------------|--------------------------------|---------------------------------|-----------|
 |Movielens-1M  |0.8039                          |  0.6975                         | 0.2821    |
-|Movielens-20M |0.9453.                         |  0.7409                         | 0.2886    |
+|Movielens-20M |0.9453                          |  0.7409                         | 0.2886    |
 
 
 
