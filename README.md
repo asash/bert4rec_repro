@@ -37,7 +37,7 @@ if you use any part of this code, please cite one or both papers  of the papers 
 
 
 ## Expected BERT4Rec results on Standard datasets
-We hope our work becomes a resource for verifying expected BERT4Rec results. When you use BERT4Rec as a baseline, the numbers you should expect are
+We hope our work becomes a resource for verifying expected BERT4Rec results. When you use BERT4Rec as a baseline, the numbers you should expect are as follows: 
 
 ### Recall@10 (also known as HIT@10)
 |Dataset       |Uniformly Sampled, 100 negatives|Popularity sampled, 100 negatives| Unsampled |
