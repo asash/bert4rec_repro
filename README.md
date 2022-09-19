@@ -57,7 +57,7 @@ If your results are lower by a large margin you are likely using underfit versio
 
 <sup>1</sup> Result achieved using our model from this repository, based on Hugging Face transformers
 
-<sup>2</sup> Result achieved using <a href="https://github.com/jaywonchung/BERT4Rec-VAE-Pytorch">BERT4Rec-Pytorch-Vae model</a>
+<sup>2</sup> Result achieved using <a href="https://github.com/jaywonchung/BERT4Rec-VAE-Pytorch">BERT4Rec-VAE</a> implementation
 
 
 ## Installation 
