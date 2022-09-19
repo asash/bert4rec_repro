@@ -36,6 +36,26 @@ if you use any part of this code, please cite one or both papers  of the papers 
 ```
 
 
+## Expected BERT4Rec results on Standard datasets
+We hope our work becomes a resource for verifying expected BERT4Rec results. When you use BERT4Rec as a baseline, the numbers you should expect are
+
+### Recall@10 (also known as HIT@10)
+|Dataset       |Uniformly Sampled, 100 negatives|Popularity sampled, 100 negatives| Unsampled |
+|--------------|--------------------------------|---------------------------------|-----------+
+|Movielens-1M  |0.803974                        |  0.6975                         | 0.2821    |
+|Movielens-20M |0.945339                        |  0.7409                         | 0.2886    |
+
+
+
+### NDCG@10 
+|Dataset       |Uniformly Sampled, 100 negatives|Popularity sampled, 100 negatives| Unsampled |
+|--------------|--------------------------------|---------------------------------|-----------|
+|Movielens-1M  |0.600875                        |  0.4751                         | 0.1516    |
+|Movielens-20M |0.782702                        |  0.5259                         | 0.1732    |
+
+If your results are lower by a large margen you are likely using underfit version of BERT4Rec. 
+
+
 
 
 ## Installation 
