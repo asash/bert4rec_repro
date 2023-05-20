@@ -18,8 +18,8 @@ class GRU4Rec(SequentialRecsysModel):
         input = layers.Input(shape=(self.max_history_length))
         x = layers.Embedding(self.num_items + 1, self.embedding_size, dtype='float32')(input)
         for i in range(self.num_gru_layers - 1):
-            x = layers.GRU(self.embedding_size, activation=self.activation, return_sequences=True)(x)
-        x = layers.GRU(self.embedding_size, activation=self.activation)(x)
+            x = layers.GRU(self.embedding_size, activation='tanh', return_sequences=True)(x)
+        x = layers.GRU(self.embedding_size, activation='tanh')(x)
 
         for i in range(self.num_dense_layers):
             x = layers.Dense(self.embedding_size, activation=self.activation)(x)
