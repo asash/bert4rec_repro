@@ -251,7 +251,7 @@ The model itself is quite simple and can be found in this [file](https://github.
 
 
 ## Systematic review of BERT4Rec and SASRec
-Spreadsheed with systematic comparison of BERT4Rec and SASRec can be found by the link: 
+Spreadsheet with systematic comparison of BERT4Rec and SASRec can be found by the link: 
 https://github.com/asash/bert4rec_repro/blob/main/Systematic%20Review.xlsx?raw=true
 
 
