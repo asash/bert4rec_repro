@@ -17,7 +17,7 @@ from aprec.utils.item_id import ItemId
 
 class VanillaBERT4Rec(Recommender):
     def __init__(self,
-                 max_seq_length = 20,
+                 max_seq_length = 200,
                  masked_lm_prob = 0.2,
                  max_predictions_per_seq = 20,
                  batch_size = 256,
