@@ -3,6 +3,10 @@ from tensorflow.keras.models import Model
 from aprec.recommenders.dnn_sequential_recommender.models.sequential_recsys_model import SequentialRecsysModel
 
 #https://arxiv.org/abs/1511.06939
+#The architecture of this model is inspired by the GRU4Rec paper
+#However, it does not reproduce the original training scheme etc. 
+#This model shouldn't be used to make any claims about original GRU4Rec performance. 
+
 class GRU4Rec(SequentialRecsysModel):
     def __init__(self,
                  output_layer_activation='linear', embedding_size=64, max_history_len=64,
